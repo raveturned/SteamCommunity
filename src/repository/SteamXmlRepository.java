@@ -39,6 +39,8 @@ public class SteamXmlRepository {
 	{
 		Document result = null;
 		SteamProfile profile = null;
+		String err = "Error resolving steam profile: %s - %s";
+		
 		//get the factory
 		
 		try {
@@ -50,11 +52,17 @@ public class SteamXmlRepository {
 			result = db.parse(uri);
 	
 		}catch(ParserConfigurationException pce) {
-			pce.printStackTrace();
+			//pce.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(err, pce.getClass(), pce.getLocalizedMessage()));
 		}catch(SAXException se) {
-			se.printStackTrace();
+			//se.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(err, se.getClass(), se.getLocalizedMessage()));
 		}catch(IOException ioe) {
-			ioe.printStackTrace();		
+			//ioe.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(err, ioe.getClass(), ioe.getLocalizedMessage()));
 		}
 		
 		if (result != null)
