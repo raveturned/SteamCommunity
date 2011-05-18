@@ -5,11 +5,13 @@ Get basic details (id, name)
 	- game
 	- group
 
-Get groups of games
-	- user's games
-	
+Get user's groups (from user's xml)
+
 Get groups of users
-	- user's friends
+	- user's friends (http://steamcommunity.com/id/raveturned/friends?xml=1)
 	- group members
+
+Get groups of games
+	- user's games (http://steamcommunity.com/id/raveturned/games?xml=1)
 	
 Calculate common games for group of users
