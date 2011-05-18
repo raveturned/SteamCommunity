@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Apr 27, 2011 10:26:51 PM                                                        
+
+     Kiva    
+     My Kiva project
+                   
+     djt                                                                
+     ====================================================================== -->
+<project name="SteamCommunity" default="default">
+    <description>
+            My SteamCommunity project
+    </description>
+
+	<property name="tst-dir" location="bin/tests" />
+
+	  <path id="classpath.base">
+	  </path>	
+	
+	<path id="classpath.test">
+    	<pathelement path="/Library/Java/Extensions/JUnit/junit4.8.2/junit-4.8.2.jar"/>
+	    <pathelement location="${tst-dir}" />
+	    <path refid="classpath.base" />		
+	</path>
+	
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" description="SteamCommunity Project" depends="clean">
+    	<mkdir dir="bin"/>
+    	
+        <javac srcdir="src" destdir="bin">
+    		<classpath>
+    			<path refid="classpath.base"/>
+    		</classpath>
+		    
+        	<include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <target name="build-tests" description="Project tests" depends="default">
+    	<mkdir dir="bin"/>
+    	
+        <javac srcdir="test" destdir="bin">
+    		<classpath>
+    			<path refid="classpath.test"/>
+    		</classpath>
+		    
+        	<include name="**/*.java"/>
+        </javac>
+    </target>	
+	
+	  <target name="clean">
+	    <delete>
+	      <fileset dir="${basedir}" includes="**/*.class" />
+	    </delete>
+	  </target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: test                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="test" depends="build-tests">
+    	<junit fork="true" forkmode="once">
+    		<classpath>
+    			<path refid="classpath.test"/>
+    			<pathelement location="${basedir}/bin"/>
+    		</classpath>
+    		<formatter type="brief" usefile="false"/>
+		  <batchtest>
+		    <fileset dir="${basedir}/bin">
+		    	<include name="**/*Tests.class" />
+		    </fileset>
+		  </batchtest>
+    	</junit>
+    </target>
+</project>

@@ -1,0 +1,15 @@
+Steam Community helper
+
+Get basic details (id, name)
+	- user
+	- game
+	- group
+
+Get groups of games
+	- user's games
+	
+Get groups of users
+	- user's friends
+	- group members
+	
+Calculate common games for group of users
