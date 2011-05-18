@@ -24,7 +24,7 @@ public class SteamXmlRepositoryTests {
 	}
 	
 	@Test
-	public void testInvalidUri()
+	public void testMalformedUri()
 	{
 		String uri = "hrrp://www.steamcommunity.com/id/raveturned?xml=1";
 		SteamXmlRepository repo = new SteamXmlRepository();
@@ -32,4 +32,24 @@ public class SteamXmlRepositoryTests {
 		
 		assertNull("Profile should be null", profile);
 	}	
+
+	@Test
+	public void testInvalidUri()
+	{
+		String uri = "http://www.google.com/";
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamProfile profile = repo.resolveSteamProfile(uri);
+		
+		assertNull("Profile should be null", profile);
+	}	
+
+	@Test
+	public void testNonxmlUri()
+	{
+		String uri = "http://www.steamcommunity.com/id/raveturned";
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamProfile profile = repo.resolveSteamProfile(uri);
+		
+		assertNull("Profile should be null", profile);
+	}
 }
