@@ -1,7 +1,6 @@
 package repository;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.*;
 
 import model.*;
 
@@ -14,7 +13,7 @@ public class SteamXmlRepositoryTests {
 	@Test
 	public void testBuild()
 	{
-		String uri = "http://steamcommunity.com/id/raveturned?xml=1";
+		String uri = "http://www.steamcommunity.com/id/raveturned?xml=1";
 		SteamXmlRepository repo = new SteamXmlRepository();
 		SteamProfile profile = repo.resolveSteamProfile(uri);
 		

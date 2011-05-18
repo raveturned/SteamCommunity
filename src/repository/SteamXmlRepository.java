@@ -22,6 +22,10 @@ public class SteamXmlRepository {
 			Element el = (Element)nl.item(0);
 			textVal = el.getFirstChild().getNodeValue();
 		}
+		//System.err.println("Element name: " + ele.getNodeName());
+		//System.err.println("Tag name: " + tagName);
+		//System.err.println("Textval found: " + textVal);
+
 
 		return textVal;
 	}
@@ -49,18 +53,20 @@ public class SteamXmlRepository {
 			ioe.printStackTrace();		
 		}
 		
-		Element root = result.getDocumentElement();
-		//should be 'profile'
-		System.err.println("Profile root node name: " + root.getNodeName());
-		
-		if ("profile".equalsIgnoreCase(root.getNodeName()))
+		if (result != null)
 		{
-			long id = Long.parseLong(getTextValue(root,"SteamID64"));
-			String name = getTextValue(root, "SteamId");
+			Element root = result.getDocumentElement();
+			//should be 'profile'
+			//System.err.println("Profile root node name: " + root.getNodeName());
 			
-			profile = new SteamProfile(id, name);	
+			if ("profile".equalsIgnoreCase(root.getNodeName()))
+			{
+				long id = Long.parseLong(getTextValue(root,"steamID64"));
+				String name = getTextValue(root, "steamID");
+				
+				profile = new SteamProfile(id, name);	
+			}
 		}
-		
 		return profile;
 	}
 	
