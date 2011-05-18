@@ -68,7 +68,7 @@ public class SteamXmlRepositoryTests {
 		   {
 		      public DocumentBuilder newDocumentBuilder() throws ParserConfigurationException
 		      {
-		         throw new ParserConfigurationException("Testing ParserConfigurationException handling");
+		         throw new ParserConfigurationException("Testing ParserConfigurationException");
 		      }
 
 		      public void setAttribute(String name, Object value) throws IllegalArgumentException
@@ -99,4 +99,49 @@ public class SteamXmlRepositoryTests {
 
 	}
 	
+	@Test
+	public void getProfileById()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamProfile profile = repo.getSteamProfile(76561197970485997l);
+		
+		assertNotNull("Profile should not be null", profile);
+		assertEquals("Id should be value specified at creation", 76561197970485997l, profile.getId());
+		assertTrue("Name should be value specified at creation", "raveturned".equalsIgnoreCase(profile.getName()));
+
+	}
+
+	@Test
+	public void getProfileByName()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamProfile profile = repo.getSteamProfile("raveturned");
+		
+		assertNotNull("Profile should not be null", profile);
+		assertEquals("Id should be value specified at creation", 76561197970485997l, profile.getId());
+		assertTrue("Name should be value specified at creation", "raveturned".equalsIgnoreCase(profile.getName()));
+
+	}
+	
+	@Test
+	public void getGamesById()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamGame[] games = repo.getSteamGamesById(76561198030489958l);
+		
+		assertNotNull("Games list should not be null", games);
+		assertTrue("Should be more than 5 games", games.length > 5);
+		System.err.println("Found games: "+games.length);
+	}
+
+	@Test
+	public void getGamesByName()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamGame[] games = repo.getSteamGamesByName("freakyflyingmonkey");
+		
+		assertNotNull("Games list should not be null", games);
+		assertTrue("Should be more than 5 games", games.length > 5);
+		System.err.println("Found games: "+games.length);
+	}	
 }

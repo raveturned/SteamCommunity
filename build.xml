@@ -38,7 +38,22 @@
         </javac>
     </target>
 
-    <target name="build-tests" description="Project tests" depends="default">
+    <!-- ================================= 
+          target: debug              
+         ================================= -->
+    <target name="debug" description="SteamCommunity Project (Debug)" depends="clean">
+    	<mkdir dir="bin"/>
+    	
+        <javac srcdir="src" destdir="bin" debug="true">
+    		<classpath>
+    			<path refid="classpath.base"/>
+    		</classpath>
+		    
+        	<include name="**/*.java"/>
+        </javac>
+    </target>	
+	
+    <target name="build-tests" description="Project tests" depends="debug">
     	<mkdir dir="bin"/>
     	
         <javac srcdir="test" destdir="bin">

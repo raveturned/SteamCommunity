@@ -1,6 +1,7 @@
 package repository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -8,9 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import model.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class SteamXmlRepository {
@@ -30,6 +29,18 @@ public class SteamXmlRepository {
 		return textVal;
 	}
 
+	public SteamProfile getSteamProfile(long id)
+	{
+		String uri = String.format("http://www.steamcommunity.com/profiles/%s?xml=1", id);
+		return resolveSteamProfile(uri);
+	}
+
+	public SteamProfile getSteamProfile(String name)
+	{
+		String uri = String.format("http://www.steamcommunity.com/id/%s?xml=1", name);
+		return resolveSteamProfile(uri);
+	}
+	
 	public SteamProfile resolveSteamProfile(String uri)
 	{
 		return resolveSteamProfile(uri, DocumentBuilderFactory.newInstance());
@@ -42,7 +53,6 @@ public class SteamXmlRepository {
 		String err = "Error resolving steam profile: %s - %s";
 		
 		//get the factory
-		
 		try {
 	
 			//Using factory get an instance of document builder
@@ -81,5 +91,96 @@ public class SteamXmlRepository {
 		}
 		return profile;
 	}
+
+	public SteamGame[] resolveSteamGames(String uri)
+	{
+		return resolveSteamGames(uri, DocumentBuilderFactory.newInstance());
+	}
+	
+	public SteamGame[] resolveSteamGames(String uri, DocumentBuilderFactory dbf)	
+	{
+		Document result = null;
+		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
+		String generalErr = "Error resolving steam games list: %s - %s";
+		String gameErr = "Error resolving steam game: %s - %s";
+		
+		//get the factory
+		try {
+	
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+	
+			//parse using builder to get DOM representation of the XML file
+			result = db.parse(uri);
+	
+		}catch(ParserConfigurationException pce) {
+			//pce.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, pce.getClass(), pce.getLocalizedMessage()));
+		}catch(SAXException se) {
+			//se.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, se.getClass(), se.getLocalizedMessage()));
+		}catch(IOException ioe) {
+			//ioe.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, ioe.getClass(), ioe.getLocalizedMessage()));
+		}
+		
+		if (result != null)
+		{
+			Element root = result.getDocumentElement();
+			//should be 'profile'
+			//System.err.println("Profile root node name: " + root.getNodeName());
+			
+			if ("gamesList".equalsIgnoreCase(root.getNodeName()))
+			{
+				
+				NodeList nl = root.getElementsByTagName("game");
+				
+				int i = 0;
+				Node node = nl.item(0);
+				
+				while(node != null){
+					
+					if (!node.getNodeName().equalsIgnoreCase("game"))
+						continue;
+					// Do something with childNode,
+					if  (node.getNodeType() != Node.ELEMENT_NODE)
+						continue;
+					
+					try{
+					Element el = (Element)node;
+					int id = Integer.parseInt(getTextValue(el, "appID"));
+					String name = getTextValue(el, "name");
+					
+					SteamGame game = new SteamGame(id, name);
+					gameList.add(game);
+					}
+					catch (NumberFormatException nfe)
+					{
+						System.err.println(String.format(gameErr, nfe.getClass(), nfe.getLocalizedMessage()));						
+					}
+					
+					i++;
+					node = nl.item(i);
+				}				
+
+			}
+		}
+		return gameList.toArray(new SteamGame[gameList.size()]);
+	}
+
+	public SteamGame[] getSteamGamesById(long id)
+	{
+		String uri = String.format("http://www.steamcommunity.com/profiles/%s/games?xml=1", id);
+		return resolveSteamGames(uri);
+	}
+
+	public SteamGame[] getSteamGamesByName(String name)
+	{
+		String uri = String.format("http://www.steamcommunity.com/id/%s/games?xml=1", name);
+		return resolveSteamGames(uri);
+	}	
 	
 }
