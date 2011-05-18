@@ -2,6 +2,8 @@ package repository;
 
 import static org.junit.Assert.*;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import model.*;
 
 import org.junit.Test;
@@ -52,4 +54,21 @@ public class SteamXmlRepositoryTests {
 		
 		assertNull("Profile should be null", profile);
 	}
+	
+/*	@Test
+	public void testPoorConfig()
+	{
+		String uri = "http://www.steamcommunity.com/id/raveturned?xml=1";
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf..setValidating(false);
+		dbf.setNamespaceAware(false);
+
+		
+		SteamXmlRepository repo = new SteamXmlRepository();
+		SteamProfile profile = repo.resolveSteamProfile(uri, dbf);
+		
+		assertNull("Profile should be null", profile);
+
+	}
+	*/
 }

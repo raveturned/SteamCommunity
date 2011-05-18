@@ -32,11 +32,15 @@ public class SteamXmlRepository {
 
 	public SteamProfile resolveSteamProfile(String uri)
 	{
+		return resolveSteamProfile(uri, DocumentBuilderFactory.newInstance());
+	}
+
+	public SteamProfile resolveSteamProfile(String uri, DocumentBuilderFactory dbf)	
+	{
 		Document result = null;
 		SteamProfile profile = null;
 		//get the factory
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	
+		
 		try {
 	
 			//Using factory get an instance of document builder
