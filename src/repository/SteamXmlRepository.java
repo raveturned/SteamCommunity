@@ -28,7 +28,36 @@ public class SteamXmlRepository {
 
 		return textVal;
 	}
-
+	
+	private Document getXmlDoc(String uri, DocumentBuilderFactory dbf) {
+		Document result = null;
+		String generalErr = "Error resolving uri: %s - %s";
+		
+		//get the factory
+		try {
+	
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+	
+			//parse using builder to get DOM representation of the XML file
+			result = db.parse(uri);
+	
+		}catch(ParserConfigurationException pce) {
+			//pce.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, pce.getClass(), pce.getLocalizedMessage()));
+		}catch(SAXException se) {
+			//se.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, se.getClass(), se.getLocalizedMessage()));
+		}catch(IOException ioe) {
+			//ioe.printStackTrace();
+			//TODO: log exception
+			System.err.println(String.format(generalErr, ioe.getClass(), ioe.getLocalizedMessage()));
+		}
+		return result;
+	}
+	
 	public SteamProfile getSteamProfile(long id)
 	{
 		String uri = String.format("http://www.steamcommunity.com/profiles/%s?xml=1", id);
@@ -48,32 +77,9 @@ public class SteamXmlRepository {
 
 	public SteamProfile resolveSteamProfile(String uri, DocumentBuilderFactory dbf)	
 	{
-		Document result = null;
 		SteamProfile profile = null;
-		String err = "Error resolving steam profile: %s - %s";
-		
-		//get the factory
-		try {
-	
-			//Using factory get an instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-	
-			//parse using builder to get DOM representation of the XML file
-			result = db.parse(uri);
-	
-		}catch(ParserConfigurationException pce) {
-			//pce.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(err, pce.getClass(), pce.getLocalizedMessage()));
-		}catch(SAXException se) {
-			//se.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(err, se.getClass(), se.getLocalizedMessage()));
-		}catch(IOException ioe) {
-			//ioe.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(err, ioe.getClass(), ioe.getLocalizedMessage()));
-		}
+
+		Document result = getXmlDoc(uri, dbf);
 		
 		if (result != null)
 		{
@@ -99,33 +105,10 @@ public class SteamXmlRepository {
 	
 	public SteamGame[] resolveSteamGames(String uri, DocumentBuilderFactory dbf)	
 	{
-		Document result = null;
-		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
-		String generalErr = "Error resolving steam games list: %s - %s";
 		String gameErr = "Error resolving steam game: %s - %s";
-		
-		//get the factory
-		try {
-	
-			//Using factory get an instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-	
-			//parse using builder to get DOM representation of the XML file
-			result = db.parse(uri);
-	
-		}catch(ParserConfigurationException pce) {
-			//pce.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(generalErr, pce.getClass(), pce.getLocalizedMessage()));
-		}catch(SAXException se) {
-			//se.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(generalErr, se.getClass(), se.getLocalizedMessage()));
-		}catch(IOException ioe) {
-			//ioe.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(generalErr, ioe.getClass(), ioe.getLocalizedMessage()));
-		}
+		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
+
+		Document result = getXmlDoc(uri, dbf);
 		
 		if (result != null)
 		{
@@ -142,13 +125,7 @@ public class SteamXmlRepository {
 				Node node = nl.item(0);
 				
 				while(node != null){
-					
-					if (!node.getNodeName().equalsIgnoreCase("game"))
-						continue;
-					// Do something with childNode,
-					if  (node.getNodeType() != Node.ELEMENT_NODE)
-						continue;
-					
+										
 					try{
 					Element el = (Element)node;
 					int id = Integer.parseInt(getTextValue(el, "appID"));

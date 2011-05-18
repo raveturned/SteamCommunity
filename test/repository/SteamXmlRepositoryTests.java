@@ -62,7 +62,8 @@ public class SteamXmlRepositoryTests {
 	@Test
 	public void testPoorConfig()
 	{
-		String uri = "http://www.steamcommunity.com/id/raveturned?xml=1";
+		String profileuri = "http://www.steamcommunity.com/id/raveturned?xml=1";
+		String gamesuri = "http://www.steamcommunity.com/id/raveturned/games?xml=1";
 
 		   DocumentBuilderFactory factory = new DocumentBuilderFactory()
 		   {
@@ -93,9 +94,11 @@ public class SteamXmlRepositoryTests {
 		   };
 		
 		SteamXmlRepository repo = new SteamXmlRepository();
-		SteamProfile profile = repo.resolveSteamProfile(uri, factory);
+		SteamProfile profile = repo.resolveSteamProfile(profileuri, factory);
+		SteamGame[] gameslist = repo.resolveSteamGames(gamesuri, factory);
 		
 		assertNull("Profile should be null", profile);
+		assertEquals("Games list should be empty", 0, gameslist.length);
 
 	}
 	
