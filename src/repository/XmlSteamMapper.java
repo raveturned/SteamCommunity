@@ -7,6 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import model.SteamGame;
+import model.SteamGroup;
 import model.SteamProfile;
 
 public class XmlSteamMapper {
@@ -102,5 +103,58 @@ public class XmlSteamMapper {
 	return game;
 	}
 
+	public ArrayList<SteamGroup> mapXmlToGroupList(Element ele)
+	{
+		ArrayList<SteamGroup> groupList = new ArrayList<SteamGroup>();
+		
+		if ("groups".equalsIgnoreCase(ele.getNodeName()))
+		{
+			
+			NodeList nl = ele.getElementsByTagName("group");
+			
+			int i = 0;
+			Node node = nl.item(0);
+			
+			while(node != null){
+									
+				Element el = (Element)node;
+
+				SteamGroup group = mapXmlToGroup(el);
+				
+				if (group != null)
+				{
+					groupList.add(group);
+				}
+				
+				i++;
+				node = nl.item(i);
+			}
+		}
+		return groupList;
+
+	}
+	
+	public SteamGroup mapXmlToGroup(Element ele)
+	{
+		SteamGroup game = null;
+		String groupErr = "Error resolving steam group: %s - %s";
+
+		if ("group".equalsIgnoreCase(ele.getNodeName()))
+		{
+
+			try {
+				int id = Integer.parseInt(getTextValue(ele, "groupID64"));
+				String name = getTextValue(ele, "groupName");
+				
+				game = new SteamGroup(id, name);
+			}
+			catch (NumberFormatException nfe)
+			{
+				System.err.println(String.format(groupErr, nfe.getClass(), nfe.getLocalizedMessage()));						
+			}
+		}
+		
+	return game;
+	}
 	
 }

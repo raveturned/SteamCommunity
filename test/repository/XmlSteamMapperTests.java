@@ -9,10 +9,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
-import model.SteamGame;
-import model.SteamProfile;
+import model.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +27,15 @@ public class XmlSteamMapperTests extends TestCase {
 	//gameslist
 	private String validGamesListXml="<gameslist><game><appID>-1</appID><name>test</name></game></gameslist>";
 	private String invalidGamesListXml="<gameslist><game><appID>trash</appID><name>test</name></game></gameslist>";
+	//group
+	private String validGroupXml="<group><groupID64>-1</groupID64><groupName>test</groupName></group>";
+	private String invalidGroupXml="<group><groupID64>trash</groupID64><groupName>test</groupName></group>";
+	//grouplist
+	private String validGroupListXml="<groups><group><groupID64>-1</groupID64><groupName>test</groupName></group></groups>";
+	private String invalidGroupListXml="<groups><group><groupID64>trash</groupID64><groupName>test</groupName></group></groups>";
 
+	
+	
 	private DocumentBuilder db;
 	private XmlSteamMapper mapper;
 
@@ -185,8 +191,8 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Document element should not be null", ele);
 		ArrayList<SteamGame> gameslist = mapper.mapXmlToGamesList(ele);
 		
-		assertNotNull("Game should be null", gameslist);
-		assertEquals("List should be empty", 1, gameslist.size());
+		assertNotNull("Games list should not be null", gameslist);
+		assertEquals("List should have one element", 1, gameslist.size());
 		
 		SteamGame game = gameslist.get(0);
 		
@@ -225,4 +231,128 @@ public class XmlSteamMapperTests extends TestCase {
 		assertEquals("List should be empty", 0, gameslist.size());
 	}	
 	
+
+	@Test
+	public void testValidGroupXml()
+	{
+		InputStream is = new ByteArrayInputStream( validGroupXml.getBytes() );
+		Document result = null;
+
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		SteamGroup group = mapper.mapXmlToGroup(ele);
+		
+		assertEquals("Correct id", -1, group.getId());
+		assertEquals("Correct name", "test", group.getName());
+	}	
+	
+	@Test
+	public void testInvalidGroupXml()
+	{
+		InputStream is = new ByteArrayInputStream( invalidGroupXml.getBytes() );
+		Document result = null;
+
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		SteamGroup group = mapper.mapXmlToGroup(ele);
+		
+		assertNull("Group should be null", group);
+	}	
+	
+
+	@Test
+	public void testValidGroupListXml()
+	{
+		InputStream is = new ByteArrayInputStream( validGroupListXml.getBytes() );
+		Document result = null;
+
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		ArrayList<SteamGroup> grouplist = mapper.mapXmlToGroupList(ele);
+		
+		assertNotNull("Group list should not be null", grouplist);
+		assertEquals("List should have one elemeent", 1, grouplist.size());
+		
+		SteamGroup group = grouplist.get(0);
+		
+		assertEquals("Correct id", -1, group.getId());
+		assertEquals("Correct name", "test", group.getName());
+
+
+	}	
+	
+	@Test
+	public void testInvalidGroupListXml()
+	{
+		InputStream is = new ByteArrayInputStream( invalidGroupListXml.getBytes() );
+		Document result = null;
+
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		ArrayList<SteamGroup> grouplist = mapper.mapXmlToGroupList(ele);
+		
+		assertNotNull("Group list should not be null", grouplist);
+		assertEquals("List should be empty", 0, grouplist.size());
+	}	
+
 }
