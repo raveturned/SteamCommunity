@@ -26,7 +26,7 @@ public class XmlSteamMapper {
 		return textVal;
 	}
 	
-	public static SteamProfile mapXmlToProfile(Element ele)
+	public SteamProfile mapXmlToProfile(Element ele)
 	{
 		String profileErr = "Error resolving steam profile: %s - %s";
 		
@@ -48,7 +48,7 @@ public class XmlSteamMapper {
 
 	}
 	
-	public static ArrayList<SteamGame> mapXmlToGamesList(Element ele)
+	public ArrayList<SteamGame> mapXmlToGamesList(Element ele)
 	{
 		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
 		
@@ -79,7 +79,7 @@ public class XmlSteamMapper {
 
 	}
 	
-	public static SteamGame mapXmlToGame(Element ele)
+	public SteamGame mapXmlToGame(Element ele)
 	{
 		SteamGame game = null;
 		String gameErr = "Error resolving steam game: %s - %s";

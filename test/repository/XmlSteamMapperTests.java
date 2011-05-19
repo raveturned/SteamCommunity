@@ -31,10 +31,12 @@ public class XmlSteamMapperTests extends TestCase {
 	private String invalidGamesListXml="<gameslist><game><appID>trash</appID><name>test</name></game></gameslist>";
 
 	private DocumentBuilder db;
+	private XmlSteamMapper mapper;
 
 	
     protected void setUp() {
     	try {
+    		mapper = new XmlSteamMapper();
 			db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -65,7 +67,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamProfile profile = XmlSteamMapper.mapXmlToProfile(ele);
+		SteamProfile profile = mapper.mapXmlToProfile(ele);
 		
 		assertEquals("Correct id", -1, profile.getId());
 		assertEquals("Correct name", "test", profile.getName());
@@ -95,7 +97,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamProfile profile = XmlSteamMapper.mapXmlToProfile(ele);
+		SteamProfile profile = mapper.mapXmlToProfile(ele);
 		
 		assertNull("Profile should be null", profile);
 	}
@@ -123,7 +125,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamGame game = XmlSteamMapper.mapXmlToGame(ele);
+		SteamGame game = mapper.mapXmlToGame(ele);
 		
 		assertEquals("Correct id", -1, game.getId());
 		assertEquals("Correct name", "test", game.getName());
@@ -152,7 +154,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamGame game = XmlSteamMapper.mapXmlToGame(ele);
+		SteamGame game = mapper.mapXmlToGame(ele);
 		
 		assertNull("Game should be null", game);
 	}	
@@ -181,7 +183,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		ArrayList<SteamGame> gameslist = XmlSteamMapper.mapXmlToGamesList(ele);
+		ArrayList<SteamGame> gameslist = mapper.mapXmlToGamesList(ele);
 		
 		assertNotNull("Game should be null", gameslist);
 		assertEquals("List should be empty", 1, gameslist.size());
@@ -217,7 +219,7 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		ArrayList<SteamGame> gameslist = XmlSteamMapper.mapXmlToGamesList(ele);
+		ArrayList<SteamGame> gameslist = mapper.mapXmlToGamesList(ele);
 		
 		assertNotNull("Games list should not be null", gameslist);
 		assertEquals("List should be empty", 0, gameslist.size());
