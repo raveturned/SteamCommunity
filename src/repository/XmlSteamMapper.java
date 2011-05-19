@@ -28,7 +28,7 @@ public class XmlSteamMapper {
 	
 	public static SteamProfile mapXmlToProfile(Element ele)
 	{
-		String profileErr = "Error resolving profile game: %s - %s";
+		String profileErr = "Error resolving steam profile: %s - %s";
 		
 		SteamProfile profile = null;
 		if ("profile".equalsIgnoreCase(ele.getNodeName()))
