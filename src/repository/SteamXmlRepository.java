@@ -14,6 +14,13 @@ import org.xml.sax.SAXException;
 
 public class SteamXmlRepository {
 	
+	XmlSteamMapper mapper = null;
+	
+	public SteamXmlRepository()
+	{
+		mapper = new XmlSteamMapper();
+	}
+	
 	private Document getXmlDoc(String uri, DocumentBuilderFactory dbf) {
 		Document result = null;
 		String generalErr = "Error resolving uri: %s - %s";
@@ -72,7 +79,7 @@ public class SteamXmlRepository {
 			//should be 'profile'
 			//System.err.println("Profile root node name: " + root.getNodeName());
 			
-			profile = XmlSteamMapper.mapXmlToProfile(root);
+			profile = mapper.mapXmlToProfile(root);
 			
 		}
 		return profile;
@@ -95,7 +102,7 @@ public class SteamXmlRepository {
 			Element root = result.getDocumentElement();
 			//should be 'profile'
 			//System.err.println("Profile root node name: " + root.getNodeName());
-			gameList.addAll(XmlSteamMapper.mapXmlToGamesList(root));
+			gameList.addAll(mapper.mapXmlToGamesList(root));
 			
 		}
 		return gameList.toArray(new SteamGame[gameList.size()]);
