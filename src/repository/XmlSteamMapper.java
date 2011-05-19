@@ -25,7 +25,6 @@ public class XmlSteamMapper {
 
 		return textVal;
 	}
-
 	
 	public static SteamProfile mapXmlToProfile(Element ele)
 	{
@@ -48,7 +47,6 @@ public class XmlSteamMapper {
 		return profile;
 
 	}
-	
 	
 	public static ArrayList<SteamGame> mapXmlToGamesList(Element ele)
 	{
