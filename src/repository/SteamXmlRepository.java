@@ -13,21 +13,6 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class SteamXmlRepository {
-
-	private static String getTextValue(Element ele, String tagName) {
-		String textVal = null;
-		NodeList nl = ele.getElementsByTagName(tagName);
-		if(nl != null && nl.getLength() > 0) {
-			Element el = (Element)nl.item(0);
-			textVal = el.getFirstChild().getNodeValue();
-		}
-		//System.err.println("Element name: " + ele.getNodeName());
-		//System.err.println("Tag name: " + tagName);
-		//System.err.println("Textval found: " + textVal);
-
-
-		return textVal;
-	}
 	
 	private Document getXmlDoc(String uri, DocumentBuilderFactory dbf) {
 		Document result = null;
@@ -87,13 +72,8 @@ public class SteamXmlRepository {
 			//should be 'profile'
 			//System.err.println("Profile root node name: " + root.getNodeName());
 			
-			if ("profile".equalsIgnoreCase(root.getNodeName()))
-			{
-				long id = Long.parseLong(getTextValue(root,"steamID64"));
-				String name = getTextValue(root, "steamID");
-				
-				profile = new SteamProfile(id, name);	
-			}
+			profile = XmlSteamMapper.mapXmlToProfile(root);
+			
 		}
 		return profile;
 	}
@@ -105,45 +85,18 @@ public class SteamXmlRepository {
 	
 	public SteamGame[] resolveSteamGames(String uri, DocumentBuilderFactory dbf)	
 	{
-		String gameErr = "Error resolving steam game: %s - %s";
 		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
 
 		Document result = getXmlDoc(uri, dbf);
+		
 		
 		if (result != null)
 		{
 			Element root = result.getDocumentElement();
 			//should be 'profile'
 			//System.err.println("Profile root node name: " + root.getNodeName());
+			gameList.addAll(XmlSteamMapper.mapXmlToGamesList(root));
 			
-			if ("gamesList".equalsIgnoreCase(root.getNodeName()))
-			{
-				
-				NodeList nl = root.getElementsByTagName("game");
-				
-				int i = 0;
-				Node node = nl.item(0);
-				
-				while(node != null){
-										
-					try{
-					Element el = (Element)node;
-					int id = Integer.parseInt(getTextValue(el, "appID"));
-					String name = getTextValue(el, "name");
-					
-					SteamGame game = new SteamGame(id, name);
-					gameList.add(game);
-					}
-					catch (NumberFormatException nfe)
-					{
-						System.err.println(String.format(gameErr, nfe.getClass(), nfe.getLocalizedMessage()));						
-					}
-					
-					i++;
-					node = nl.item(i);
-				}				
-
-			}
 		}
 		return gameList.toArray(new SteamGame[gameList.size()]);
 	}
