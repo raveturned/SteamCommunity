@@ -2,15 +2,15 @@ package model;
 
 public class SteamGame {
 
-	private long _id;
+	private int _id;
 	private String _name;
 	
-	public SteamGame(long id, String name) {
+	public SteamGame(int id, String name) {
 		_id = id;
 		_name = name;
 	}
 	
-	public long getId() {
+	public int getId() {
 		// TODO Auto-generated method stub
 		return _id;
 	}

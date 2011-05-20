@@ -36,7 +36,7 @@ public class XmlSteamMapper {
 		{
 			try {
 			long id = Long.parseLong(getTextValue(ele,"steamID64"));
-			String name = getTextValue(ele, "steamID");
+			String name = getTextValue(ele, "steamID");			
 			
 			profile = new SteamProfile(id, name);
 			}
