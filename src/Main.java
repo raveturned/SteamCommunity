@@ -12,13 +12,13 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		SteamXmlRepository repo = new SteamXmlRepository();
 		
 		HashMap<Integer, SteamGame> gameIdDetailsMap = new HashMap<Integer, SteamGame>();
 		HashMap<Integer, ArrayList<SteamProfile>> gameIdPlayersMap = new HashMap<Integer, ArrayList<SteamProfile>>();
 
 		
+		// TODO get ids from group xml page
 		//get profiles for all people from member list
 		long[] memberIds = {
 				// list of as 20/05/2011
@@ -96,6 +96,10 @@ public class Main {
 		// output sorted values - games, size, profiles (from earlier hashset)
 		for (Integer playerCount : playerCountGamesMap.keySet())
 		{
+			//ignore games only owned by one person - useful?
+			if (playerCount < 2)
+				continue;
+			
 			for (SteamGame game : playerCountGamesMap.get(playerCount))
 			{
 				ArrayList<SteamProfile> players = gameIdPlayersMap.get(game.getId());
