@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -91,11 +94,32 @@ public class Main {
 			}
 		}				
 
-		System.err.println("Enumerating games:");
-		String output = "(id:%s) '%s' - %s player(s) %s";
+	    // Create file
+		
+		PrintStream out = null;
+		try {
+			out = new PrintStream(new FileOutputStream("output.html", false));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			out = System.out;
+			out.println();
+			out.println("COULD NOT CREATE FILE - fallback to console output");
+			out.println("--------------------------------------------------");
+			out.println();
+		}
+		//html headers
+		out.println("<html><head></head><body><table border=1px>");
+		
+		out.println("<tr><th width=200px>Game</th><th>Player Count</th><th>Players</th></tr>");
+		
+		//System.err.println("Enumerating games:");
+		//logo, title, playercount, playerdatastring
+		String output = "<tr><td width=200px><img src=\"%s\"/><br/>%s</td><td>%s</td><td>%s</td></tr>";
 		// output sorted values - games, size, profiles (from earlier hashset)
-		for (Integer playerCount : playerCountGamesMap.keySet())
+		for (Integer playerCount : playerCountGamesMap.descendingKeySet())
 		{
+			
 			//ignore games only owned by one person - useful?
 			if (playerCount < 2)
 				continue;
@@ -103,20 +127,26 @@ public class Main {
 			for (SteamGame game : playerCountGamesMap.get(playerCount))
 			{
 				ArrayList<SteamProfile> players = gameIdPlayersMap.get(game.getId());
-				String playerString = "{";
+				String playerString = "";
 				
-				playerString += players.get(0).getName();
-
-				for ( int i = 1; i < players.size(); i++)
+				for ( int i = 0; i < players.size(); i++)
 				{
-					playerString += String.format(", %s", players.get(i).getName());
+					SteamProfile player = players.get(i);
+					playerString += String.format("<img src=\"%s\"/> %s", player.getSmallAvatarUrl(), player.getName());
+					if (i < players.size() -1)
+					{
+						playerString += "<br/>";
+					}
 				}
-				
-				playerString += "}";
-				
-				System.out.println(String.format(output, game.getId(), game.getName(), playerCount, playerString ));
+								
+				out.println(String.format(output, game.getLogoUrl(), game.getName(), playerCount, playerString ));
 			}							
-		}				
+		}
+		//html footer
+		out.println("</table></body></html>");
+		
+		out.close();
+
 	}
 		
 }

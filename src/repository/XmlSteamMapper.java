@@ -36,9 +36,12 @@ public class XmlSteamMapper {
 		{
 			try {
 			long id = Long.parseLong(getTextValue(ele,"steamID64"));
-			String name = getTextValue(ele, "steamID");			
+			String name = getTextValue(ele, "steamID");
+			String smallAvatarUrl = getTextValue(ele, "avatarIcon");
+			String mediumAvatarUrl = getTextValue(ele, "avatarMedium");
+			String largeAvatarUrl = getTextValue(ele, "avatarFull");
 			
-			profile = new SteamProfile(id, name);
+			profile = new SteamProfile(id, name, smallAvatarUrl, mediumAvatarUrl, largeAvatarUrl);
 			}
 			catch(NumberFormatException nfe)
 			{
@@ -91,8 +94,10 @@ public class XmlSteamMapper {
 			try {
 				int id = Integer.parseInt(getTextValue(ele, "appID"));
 				String name = getTextValue(ele, "name");
+				String logoUrl = getTextValue(ele, "logo");
+				String storeUrl = getTextValue(ele, "storeLink");
 				
-				game = new SteamGame(id, name);
+				game = new SteamGame(id, name, logoUrl, storeUrl);
 			}
 			catch (NumberFormatException nfe)
 			{

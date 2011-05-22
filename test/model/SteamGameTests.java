@@ -10,9 +10,16 @@ public class SteamGameTests {
 	 @Test
 	 public void testBuild()
 	 {
-		 SteamGame game = new SteamGame(-1, "test");
+		 int testId = -1;
+		 String testName = "test";
+		 String testLogo = "logo";
+		 String testStoreUrl = "store";
+		 
+		 SteamGame game = new SteamGame(testId, testName, testLogo, testStoreUrl);
 		 assertNotNull("Game should not be null", game);
-		 assertEquals("Id should be value specified at creation", -1, game.getId());
-		 assertEquals("Name should be value specified at creation", "test", game.getName());
+		 assertEquals("Id should be value specified at creation", testId, game.getId());
+		 assertEquals("Name should be value specified at creation", testName, game.getName());
+		 assertEquals("Logo should be value specified at creation", testLogo, game.getLogoUrl());
+		 assertEquals("Store link should be value specified at creation", testStoreUrl, game.getStoreUrl());
 	 }
 }
