@@ -1,7 +1,10 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -114,8 +117,8 @@ public class Main {
 		out.println("<tr><th width=200px>Game</th><th>Player Count</th><th>Players</th></tr>");
 		
 		//System.err.println("Enumerating games:");
-		//logo, title, playercount, playerdatastring
-		String output = "<tr><td width=200px><img src=\"%s\"/><br/>%s</td><td>%s</td><td>%s</td></tr>";
+		//gamedatastring, playercount, playerdatastring
+		String output = "<tr><td width=200px>%s</td><td>%s</td><td>%s</td></tr>";
 		// output sorted values - games, size, profiles (from earlier hashset)
 		for (Integer playerCount : playerCountGamesMap.descendingKeySet())
 		{
@@ -123,9 +126,12 @@ public class Main {
 			//ignore games only owned by one person - useful?
 			if (playerCount < 2)
 				continue;
-			
+						
 			for (SteamGame game : playerCountGamesMap.get(playerCount))
 			{
+
+				String gamedata = formatGameData(game);
+				
 				ArrayList<SteamProfile> players = gameIdPlayersMap.get(game.getId());
 				String playerString = "";
 				
@@ -139,14 +145,22 @@ public class Main {
 					}
 				}
 								
-				out.println(String.format(output, game.getLogoUrl(), game.getName(), playerCount, playerString ));
+				out.println(String.format(output, gamedata, playerCount, playerString ));
 			}							
 		}
 		//html footer
-		out.println("</table></body></html>");
+		DateFormat formatter = DateFormat.getDateInstance(DateFormat.LONG);
+		String dateinfo = formatter.format(new Date());
+		out.println(String.format("</table><br/>Last generated: %s</body></html>", dateinfo));
 		
 		out.close();
 
+	}
+
+	private static String formatGameData(SteamGame game) {
+		String format = "<a href=\"%s\"><img src=\"%s\"/><br/>%s</a>";
+		String output = String.format(format, game.getStoreUrl(), game.getLogoUrl(), game.getName());
+		return output;
 	}
 		
 }
