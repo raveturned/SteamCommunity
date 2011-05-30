@@ -3,7 +3,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -11,18 +10,16 @@ import java.util.TreeMap;
 import repository.SteamXmlRepository;
 import model.*;
 
+// TODO: should not call repo directly - all through service layer
+// service layer should call repo, cache objects (e.g. game), perform sorting
+// output should be mediated by separate view class
 
 public class Main {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		SteamXmlRepository repo = new SteamXmlRepository();
-		
-		HashMap<Integer, SteamGame> gameIdDetailsMap = new HashMap<Integer, SteamGame>();
-		HashMap<Integer, ArrayList<SteamProfile>> gameIdPlayersMap = new HashMap<Integer, ArrayList<SteamProfile>>();
-
+	public static void main(String[] args) {		
 		
 		// TODO get ids from group xml page
 		//get profiles for all people from member list
@@ -36,6 +33,13 @@ public class Main {
 				};
 		//for each profile, get all games
 		
+		//repository
+		SteamXmlRepository repo = new SteamXmlRepository();
+		//map of game id to game details
+		HashMap<Integer, SteamGame> gameIdDetailsMap = new HashMap<Integer, SteamGame>();
+		//map of game id to players
+		HashMap<Integer, ArrayList<SteamProfile>> gameIdPlayersMap = new HashMap<Integer, ArrayList<SteamProfile>>();
+
 		//maintain hashtable of game id, games
 		//maintain hashtable of game id, list of profiles
 		for (long id :memberIds)
