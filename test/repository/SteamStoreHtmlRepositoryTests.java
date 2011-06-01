@@ -18,16 +18,30 @@ public class SteamStoreHtmlRepositoryTests {
 		assertNotNull("Details array should not be null", details);
 		assertNotSame("Details array should not be empty", 0, details.length);
 
+		/*
 		System.err.println("Details:");
 		
 		for (String s : details)
 		{
 			System.err.println(s);
 		}
+		*/
 		
 		assertEquals("Details array should have 7 entries", 7, details.length);
 		
 
 	}
+	
+	@Test
+	public void testHasDetailsValidAppId()
+	{
+		//half-life 2
+		int id = 220;
+		SteamStoreHtmlRepository repo = new SteamStoreHtmlRepository();
+				
+		assertTrue("HL2 is single-player", repo.hasDetail(id, "single-player"));
+		assertFalse("HL2 is not multi-player", repo.hasDetail(id, "multi-player"));
+
+	}	
 	
 }
