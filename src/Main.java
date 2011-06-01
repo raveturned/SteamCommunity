@@ -5,8 +5,10 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
+import repository.SteamStoreHtmlRepository;
 import repository.SteamXmlRepository;
 import model.*;
 
@@ -76,7 +78,7 @@ public class Main {
 		
 		
 		//create new sorted hashtable of size of profile and game
-		TreeMap<Integer, ArrayList<SteamGame>> playerCountGamesMap = new TreeMap<Integer, ArrayList<SteamGame>>();
+		TreeMap<Integer, SortedMap<String, SteamGame>> playerCountGamesMap = new TreeMap<Integer, SortedMap<String, SteamGame>>();
 
 		System.err.println("Sorting by player count...");
 
@@ -88,16 +90,16 @@ public class Main {
 			if (!playerCountGamesMap.containsKey(profiles.size()))
 			{
 				// add new list containing player, add player map 
-				ArrayList<SteamGame> list = new ArrayList<SteamGame>();
-				list.add(gameDetail);
-				playerCountGamesMap.put(profiles.size(), list);
+				SortedMap<String, SteamGame> map = new TreeMap<String, SteamGame>();
+				map.put(gameDetail.getName(), gameDetail);
+				playerCountGamesMap.put(profiles.size(), map);
 			}					
 			else
 			{
 				//playerCountGamesMap.get(profiles.size());
-				ArrayList<SteamGame> list = playerCountGamesMap.get(profiles.size());
+				SortedMap<String, SteamGame> map = playerCountGamesMap.get(profiles.size());
 				//add to list
-				list.add(gameDetail);
+				map.put(gameDetail.getName(), gameDetail);
 			}
 		}				
 
@@ -124,16 +126,28 @@ public class Main {
 		//gamedatastring, playercount, playerdatastring
 		String output = "<tr><td width=200px>%s</td><td>%s</td><td>%s</td></tr>";
 		// output sorted values - games, size, profiles (from earlier hashset)
+		SteamStoreHtmlRepository storeRepo = new SteamStoreHtmlRepository();
 		for (Integer playerCount : playerCountGamesMap.descendingKeySet())
 		{
-			
 			//ignore games only owned by one person - useful?
 			if (playerCount < 2)
 				continue;
-						
-			for (SteamGame game : playerCountGamesMap.get(playerCount))
+			
+			SortedMap<String, SteamGame> map = playerCountGamesMap.get(playerCount);
+			
+			for (SteamGame game : map.values())
 			{
+				System.err.print(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
+				
 
+				if (!storeRepo.hasDetail(game.getId(), "Multi-player"))
+				{
+					System.err.println(" not multi-player.");
+					continue;
+				}
+
+				System.err.println(" is multi-player! Sending output.");
+				
 				String gamedata = formatGameData(game);
 				
 				ArrayList<SteamProfile> players = gameIdPlayersMap.get(game.getId());
