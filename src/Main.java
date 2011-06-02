@@ -118,7 +118,9 @@ public class Main {
 			out.println();
 		}
 		//html headers
-		out.println("<html><head></head><body><table border=1px>");
+		out.println("<html><head>");
+		out.println("<link href=\"flopsoc.css\" rel=\"stylesheet\" type=\"text/css\" />");
+		out.println("</head><body><table border=1px>");
 		
 		out.println("<tr><th width=200px>Game</th><th>Player Count</th><th>Players</th></tr>");
 		
@@ -156,7 +158,7 @@ public class Main {
 				for ( int i = 0; i < players.size(); i++)
 				{
 					SteamProfile player = players.get(i);
-					playerString += String.format("<img src=\"%s\"/> %s", player.getSmallAvatarUrl(), player.getName());
+					playerString += formatProfileData(player);
 					if (i < players.size() -1)
 					{
 						playerString += "<br/>";
@@ -180,5 +182,11 @@ public class Main {
 		String output = String.format(format, game.getStoreUrl(), game.getLogoUrl(), game.getName());
 		return output;
 	}
-		
+
+	
+	private static String formatProfileData(SteamProfile profile) {
+		String format = "<a href=\"%s\"><img src=\"%s\"/> %s </a>";
+		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName());
+		return output;
+	}
 }

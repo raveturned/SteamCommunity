@@ -39,6 +39,11 @@ public class SteamProfile {
 	public String getLargeAvatarUrl() {
 		// TODO Auto-generated method stub
 		return _largeAvatarUrlString;
-	}	
+	}
+	
+	public String getCommunityProfileUrl()
+	{
+		return String.format("http://steamcommunity.com/profiles/%s/", _id);
+	}
 			
 }
