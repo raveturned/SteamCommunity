@@ -17,3 +17,11 @@ Optimise!
 Include free games list.
 Nicer HTML.
 Include small list of multiplayer games which one member owns.
+
+=====
+
+Issues
+	- failure when getting profiles of RPS members
+	- Some games get listed twice with same ids? e.g. CoD MW2 & CoD MW2 Multi-Player
+	- filter games by details earlier in process to reduce iteration overhead
+	

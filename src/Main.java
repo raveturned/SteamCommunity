@@ -54,9 +54,11 @@ public class Main {
 
 		//maintain hashtable of game id, games
 		//maintain hashtable of game id, list of profiles
+		int count=0;
 		for (long id :memberIds)
 		{	
-			System.err.print(String.format("Getting profile for id %s", id));
+			count++;
+			System.err.print(String.format("Getting profile for id %s (%s/%s)", id, count, memberIds.length));
 			SteamProfile profile = svc.getSteamProfile(id);
 			System.err.println(String.format(" %s", profile.getName()));
 			if (profile != null)
@@ -65,6 +67,8 @@ public class Main {
 				
 				for (SteamGame game : games)
 				{
+					
+					
 					if (!gameIdDetailsMap.containsKey(game.getId()))
 					{
 						//add game to details map
@@ -143,9 +147,12 @@ public class Main {
 			//ignore games only owned by one person - useful?
 			if (playerCount < 2)
 				continue;
-			
+					
 			SortedMap<String, SteamGame> map = playerCountGamesMap.get(playerCount);
-			
+
+			//how far are we? 
+			System.err.println(String.format("Players: %s - %s games, ", playerCount, map.size()));
+	
 			for (SteamGame game : map.values())
 			{
 				System.err.print(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
