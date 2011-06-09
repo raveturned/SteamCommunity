@@ -11,6 +11,7 @@ Get groups of users
 
 Factor html writing code into view package
 Factor processing code into service package
+Hide everything behind interfaces, for encapsulation/testibility/mocking.
 
 Optimise!
 Include free games list.
