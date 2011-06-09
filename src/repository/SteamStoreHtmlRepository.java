@@ -28,18 +28,5 @@ public class SteamStoreHtmlRepository {
 	        System.err.println(e);
 	      }		//send through parser
 	      return callback.getResults();
-	}
-
-	public boolean hasDetail(int id, String detail) {
-		String[] details = getAppDetails(id);
-		
-		for (String s:details)
-		{
-			if (s.trim().equalsIgnoreCase(detail.trim()))
-				return true;
-		}
-		
-		return false;
-	}
-	
+	}	
 }

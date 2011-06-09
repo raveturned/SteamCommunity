@@ -31,17 +31,5 @@ public class SteamStoreHtmlRepositoryTests {
 		
 
 	}
-	
-	@Test
-	public void testHasDetailsValidAppId()
-	{
-		//half-life 2
-		int id = 220;
-		SteamStoreHtmlRepository repo = new SteamStoreHtmlRepository();
-				
-		assertTrue("HL2 is single-player", repo.hasDetail(id, "single-player"));
-		assertFalse("HL2 is not multi-player", repo.hasDetail(id, "multi-player"));
-
-	}	
-	
+		
 }

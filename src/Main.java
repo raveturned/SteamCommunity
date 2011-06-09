@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import repository.SteamStoreHtmlRepository;
-import repository.SteamXmlRepository;
+//import repository.SteamStoreHtmlRepository;
+//import repository.SteamXmlRepository;
+import service.SteamDataService;
 import model.*;
 
 // TODO: should not call repo directly - all through service layer
@@ -29,9 +30,11 @@ public class Main {
 		String group = "flopsoc";
 
 		//repository
-		SteamXmlRepository repo = new SteamXmlRepository();
+		//SteamXmlRepository repo = new SteamXmlRepository();
 		
-		long[] memberIds = repo.getSteamGroupMembers(group);
+		SteamDataService svc = new SteamDataService();
+		
+		long[] memberIds = svc.getSteamGroupMembers(group);
 		/*
 		{
 				// list of as 20/05/2011
@@ -54,11 +57,11 @@ public class Main {
 		for (long id :memberIds)
 		{	
 			System.err.print(String.format("Getting profile for id %s", id));
-			SteamProfile profile = repo.getSteamProfile(id);
+			SteamProfile profile = svc.getSteamProfile(id);
 			System.err.println(String.format(" %s", profile.getName()));
 			if (profile != null)
 			{
-				SteamGame[] games= repo.getSteamGamesById(id);
+				SteamGame[] games= svc.getSteamGamesById(id);
 				
 				for (SteamGame game : games)
 				{
@@ -135,7 +138,6 @@ public class Main {
 		//gamedatastring, playercount, playerdatastring
 		String output = "<tr><td width=200px>%s</td><td>%s</td><td>%s</td></tr>";
 		// output sorted values - games, size, profiles (from earlier hashset)
-		SteamStoreHtmlRepository storeRepo = new SteamStoreHtmlRepository();
 		for (Integer playerCount : playerCountGamesMap.descendingKeySet())
 		{
 			//ignore games only owned by one person - useful?
@@ -149,7 +151,7 @@ public class Main {
 				System.err.print(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
 				
 
-				if (! (storeRepo.hasDetail(game.getId(), "Multi-player") || storeRepo.hasDetail(game.getId(), "Co-op")))
+				if (! (svc.gameHasDetail(game.getId(), "Multi-player") || svc.gameHasDetail(game.getId(), "Co-op")))
 				{
 					System.err.println(" not multi-player.");
 					continue;
