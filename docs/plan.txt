@@ -1,18 +1,18 @@
 Steam Community helper
 
-Get basic details (id, name)
-	- user
-	- game
-	- group
-
-Get list of games
-	- user's games (http://steamcommunity.com/id/raveturned/games?xml=1)
+Get group details from community page xml
+	name
+	id
 
 Get user's groups (from user's xml)
 
 Get groups of users
-	- user's friends (http://steamcommunity.com/id/raveturned/friends?xml=1)
-	- group members
+	- user's friends (http://steamcommunity.com/id/raveturned/friends?xml=1)	
 
-	
-Calculate common games for group of users
+Factor html writing code into view package
+Factor processing code into service package
+
+Optimise!
+Include free games list.
+Nicer HTML.
+Include small list of multiplayer games which one member owns.

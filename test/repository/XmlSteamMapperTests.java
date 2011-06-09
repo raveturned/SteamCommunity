@@ -34,7 +34,9 @@ public class XmlSteamMapperTests extends TestCase {
 	private String validGroupListXml="<groups><group><groupID64>-1</groupID64><groupName>test</groupName></group></groups>";
 	private String invalidGroupListXml="<groups><group><groupID64>trash</groupID64><groupName>test</groupName></group></groups>";
 
-	
+	//memberlist
+	private String validMemberListXml="<memberList><members><steamID64>76561197960265740</steamID64><steamID64>76561197985627266</steamID64></members></memberList>";
+	private String pagedMemberListXml="<memberList><nextPageLink><![CDATA[http://steamcommunity.com/groups/testgroup/memberslistxml?xml=1]]></nextPageLink><members><steamID64>76561197960265740</steamID64><steamID64>76561197985627266</steamID64></members></memberList>";
 	
 	private DocumentBuilder db;
 	private XmlSteamMapper mapper;
@@ -353,6 +355,65 @@ public class XmlSteamMapperTests extends TestCase {
 		
 		assertNotNull("Group list should not be null", grouplist);
 		assertEquals("List should be empty", 0, grouplist.size());
-	}	
+	}
+	
+	@Test
+	public void testValidMembersListXml()
+	{
+		InputStream is = new ByteArrayInputStream( validMemberListXml.getBytes() );
+		Document result = null;
 
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		ArrayList<Long> ids = mapper.mapXmlToMemberList(ele);
+		
+		assertNotNull("Ids list should not be null", ids);
+		assertEquals("List should have two members", 2, ids.size());
+	}
+
+	
+	@Test
+	public void testValidMembersListPaging()
+	{
+		InputStream is = new ByteArrayInputStream( pagedMemberListXml.getBytes() );
+		Document result = null;
+
+		assertNotNull("DocBuilder should not be null", db);
+		assertNotNull("InputStream should not be null", is);
+
+		try {
+			result = db.parse(is);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertNotNull("Result should not be null", result);
+		Element ele = result.getDocumentElement();
+		assertNotNull("Document element should not be null", ele);
+		String nextPage = mapper.xmlGetMemberListNextPage(ele);
+		
+		assertNotNull("Page should not be null", nextPage);
+		assertEquals("Page should be testpage", "http://steamcommunity.com/groups/testgroup/memberslistxml?xml=1", nextPage);
+	}
+	
 }

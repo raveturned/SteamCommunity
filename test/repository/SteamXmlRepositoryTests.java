@@ -147,4 +147,26 @@ public class SteamXmlRepositoryTests {
 		assertTrue("Should be more than 5 games", games.length > 5);
 		System.err.println("Found games: "+games.length);
 	}	
+
+	@Test
+	public void getSmallGroupMembersList()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		long[] ids = repo.getSteamGroupMembers("flopsoc");
+		
+		assertNotNull("Member list should not be null", ids);
+		assertTrue("Should be more than 5 members", ids.length > 5);
+		System.err.println("Found members: "+ids.length);
+	}	
+	@Test
+	public void getLargeGroupMembersList()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		long[] ids = repo.getSteamGroupMembers("L4D2boycott");
+		
+		assertNotNull("Member list should not be null", ids);
+		assertTrue("Should be more than 1000 members", ids.length > 1000);
+		System.err.println("Found members: "+ids.length);
+	}	
+
 }

@@ -148,7 +148,7 @@ public class XmlSteamMapper {
 		{
 
 			try {
-				int id = Integer.parseInt(getTextValue(ele, "groupID64"));
+				long id = Long.parseLong(getTextValue(ele, "groupID64"));
 				String name = getTextValue(ele, "groupName");
 				
 				game = new SteamGroup(id, name);
@@ -161,5 +161,51 @@ public class XmlSteamMapper {
 		
 	return game;
 	}
+
+	public ArrayList<Long> mapXmlToMemberList(Element ele) {
+
+		ArrayList<Long> memberIds = new ArrayList<Long>();
+		
+		if ("memberList".equalsIgnoreCase(ele.getNodeName()))
+		{
+			
+			NodeList nl = ele.getElementsByTagName("steamID64");
+			
+			int i = 0;
+			Node node = nl.item(0);
+			
+			while(node != null){
+									
+				Element el = (Element)node;
+
+				Long id = Long.parseLong(el.getFirstChild().getNodeValue());
+				
+				memberIds.add(id);
+				i++;
+				node = nl.item(i);
+			}
+		}
+		return memberIds;
+
+	}
+	
+	public String xmlGetMemberListNextPage(Element ele) {
+		String pageLink = null;
+		
+		if ("memberList".equalsIgnoreCase(ele.getNodeName()))
+		{			
+			NodeList nl = ele.getElementsByTagName("nextPageLink");
+			
+			if (nl != null && nl.getLength() > 0)
+			{
+			Node node = nl.item(0);
+			pageLink = ((Element)node).getFirstChild().getNodeValue();
+			}
+			
+		}
+		return pageLink;
+
+	}
+	
 	
 }

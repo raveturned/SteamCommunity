@@ -25,7 +25,15 @@ public class Main {
 		
 		// TODO get ids from group xml page
 		//get profiles for all people from member list
-		long[] memberIds = {
+		
+		String group = "flopsoc";
+
+		//repository
+		SteamXmlRepository repo = new SteamXmlRepository();
+		
+		long[] memberIds = repo.getSteamGroupMembers(group);
+		/*
+		{
 				// list of as 20/05/2011
 				76561197970485997l,
 				76561198006375606l,
@@ -33,10 +41,9 @@ public class Main {
 				76561197969494863l,
 				76561197964551997l
 				};
+				*/
 		//for each profile, get all games
 		
-		//repository
-		SteamXmlRepository repo = new SteamXmlRepository();
 		//map of game id to game details
 		HashMap<Integer, SteamGame> gameIdDetailsMap = new HashMap<Integer, SteamGame>();
 		//map of game id to players
@@ -142,7 +149,7 @@ public class Main {
 				System.err.print(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
 				
 
-				if (!storeRepo.hasDetail(game.getId(), "Multi-player"))
+				if (! (storeRepo.hasDetail(game.getId(), "Multi-player") || storeRepo.hasDetail(game.getId(), "Co-op")))
 				{
 					System.err.println(" not multi-player.");
 					continue;

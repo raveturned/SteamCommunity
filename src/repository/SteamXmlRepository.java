@@ -119,5 +119,61 @@ public class SteamXmlRepository {
 		String uri = String.format("http://www.steamcommunity.com/id/%s/games?xml=1", name);
 		return resolveSteamGames(uri);
 	}	
+
 	
+	public long[] getSteamGroupMembers(SteamGroup id)
+	{
+		String uri = String.format("http://steamcommunity.com/gid/%s/memberslistxml/?xml=1", id);
+		return resolveSteamGroupMembers(uri);
+	}
+
+	public long[] getSteamGroupMembers(String name)
+	{
+		String uri = String.format("http://steamcommunity.com/groups/%s/memberslistxml/?xml=1", name);
+		return resolveSteamGroupMembers(uri);
+	}
+	
+	public long[] resolveSteamGroupMembers(String uri)
+	{
+		return resolveSteamGroupMembers(uri, DocumentBuilderFactory.newInstance());
+	}
+
+	public long[] resolveSteamGroupMembers(String uri, DocumentBuilderFactory dbf)	
+	{
+		ArrayList<Long> memberIds = new ArrayList<Long>();
+		
+		while (uri != null)
+		{
+			Document result = getXmlDoc(uri, dbf);
+			
+			if (result != null)
+			{
+				Element root = result.getDocumentElement();
+				
+				// get members
+				// get if more pages
+				
+				// list += mappergetids
+				memberIds.addAll(mapper.mapXmlToMemberList(root));
+				uri = mapper.xmlGetMemberListNextPage(root);			
+			}
+			else
+			{
+				//in case result is null (protective)
+				uri = null;
+			}
+			
+		}
+				
+	    long[] ret = new long[memberIds.size()];
+	    int i = 0;
+	    for (Long val: memberIds)
+	    {
+	        ret[i] = val;
+	        i++;
+	    }
+	    return ret;
+	}
+
+
 }
