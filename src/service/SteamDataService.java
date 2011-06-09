@@ -57,6 +57,32 @@ public class SteamDataService {
 		return false;
 	}
 
+	public boolean isMultiplayer(SteamGame game) {
+		String[] mpStrings = {"multi-player","co-op","cross-platform multiplayer"};
+		
+		String[] details;
+		if (gameDetails.containsKey(game.getId()))
+		{
+			details = gameDetails.get(game.getId());
+		}
+		else
+		{
+			System.err.println(String.format("Getting details for %s...", game.getName()));
+			details = storeRepo.getAppDetails(game.getId());
+			gameDetails.put(game.getId(), details);
+		}
+		
+		for (String i :details)
+		{
+			for (String j: mpStrings)
+			{
+				if (i.trim().equalsIgnoreCase(j.trim()))
+					return true;
+			}
+		}
+		return false;
+	}
+
 	
 	
 }

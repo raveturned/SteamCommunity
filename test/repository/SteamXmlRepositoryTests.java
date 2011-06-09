@@ -13,6 +13,22 @@ import org.junit.Test;
 public class SteamXmlRepositoryTests {
 
 
+	@Test
+	public void testProbemProfile()
+	{
+		SteamXmlRepository repo = new SteamXmlRepository();
+		long id = 76561198024616768l;
+		
+		SteamProfile profile = repo.getSteamProfile(id);
+		assertNotNull("Profile should not be null", profile);
+		assertEquals("Id should be as supplied", id, profile.getId());
+		assertNotNull("Name should not be null", profile.getName());
+		assertNotNull("Small avatar should not be null", profile.getSmallAvatarUrl());
+		assertNotNull("Medium avatar should not be null", profile.getMediumAvatarUrl());
+		assertNotNull("Large avatar should not be null", profile.getLargeAvatarUrl());
+		
+		
+	}
 	
 	@Test
 	public void testValidUri()

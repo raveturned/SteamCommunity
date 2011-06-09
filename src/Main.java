@@ -60,6 +60,13 @@ public class Main {
 			count++;
 			System.err.print(String.format("Getting profile for id %s (%s/%s)", id, count, memberIds.length));
 			SteamProfile profile = svc.getSteamProfile(id);
+			if (profile == null)
+			{
+				//TODO: bug - some profiles cannot be parsed?
+				System.err.println(String.format("Could not retrieve profile %s",id));
+				continue;
+			}
+			
 			System.err.println(String.format(" %s", profile.getName()));
 			if (profile != null)
 			{
@@ -67,6 +74,15 @@ public class Main {
 				
 				for (SteamGame game : games)
 				{
+					//skip non multiplayer games
+					if (! svc.isMultiplayer(game))
+					{
+						//System.err.println(String.format("%s is not multi-player. Discarding...", game.getName()));
+						continue;
+					}
+
+					
+					
 					
 					
 					if (!gameIdDetailsMap.containsKey(game.getId()))
@@ -155,16 +171,9 @@ public class Main {
 	
 			for (SteamGame game : map.values())
 			{
-				System.err.print(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
+				System.err.println(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
 				
-
-				if (! (svc.gameHasDetail(game.getId(), "Multi-player") || svc.gameHasDetail(game.getId(), "Co-op")))
-				{
-					System.err.println(" not multi-player.");
-					continue;
-				}
-
-				System.err.println(" is multi-player! Sending output.");
+				//System.err.println(" is multi-player! Sending output.");
 				
 				String gamedata = formatGameData(game);
 				
