@@ -196,7 +196,22 @@ public class Main {
 		//html footer
 		DateFormat formatter = DateFormat.getDateInstance(DateFormat.LONG);
 		String dateinfo = formatter.format(new Date());
-		out.println(String.format("</table><br/>Last generated: %s</body></html>", dateinfo));
+		out.println("</table><br/>");
+		//games owned by one person
+		out.println("<b>Games owned by one person:</b><br/>");
+		String gameList = "";
+		
+		SortedMap<String, SteamGame> map = playerCountGamesMap.get(1);		
+		
+		System.err.println(String.format("Players: 1 - %s games, ", map.size()));
+		for (SteamGame game : map.values())
+		{
+			System.err.println(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
+			gameList += String.format("<a href=\"%s\">%s</a>, ", game.getStoreUrl(), game.getName());
+		}
+		gameList = gameList.substring(0, gameList.lastIndexOf(", ")) + "<br/>";
+		out.println(gameList);
+		out.println(String.format("<br/>Last generated: %s</body></html>", dateinfo));
 		
 		out.close();
 
