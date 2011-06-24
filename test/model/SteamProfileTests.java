@@ -24,6 +24,9 @@ public class SteamProfileTests {
 		 assertEquals("Medium avatar should be value specified at creation", mediumAvatar, user.getMediumAvatarUrl());
 		 assertEquals("Large avatar should be value specified at creation", largeAvatar, user.getLargeAvatarUrl());
 		 //assertEquals("GroupIds should be correct length", 3, user.getGroupIds().length);
+		 String communityUrl = user.getCommunityProfileUrl();
+		 assertTrue("CommunityUrl should relate to Id", communityUrl.endsWith(String.format("%s/", testId)));
+
 	 }
 	
 }
