@@ -1,4 +1,5 @@
-Steam Community helper
+Steam Community Helper
+======================
 
 Get group details from community page xml
 	name

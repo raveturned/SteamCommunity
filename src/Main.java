@@ -33,6 +33,7 @@ public class Main {
 		//SteamXmlRepository repo = new SteamXmlRepository();
 		
 		SteamDataService svc = new SteamDataService();
+	
 		
 		long[] memberIds = svc.getSteamGroupMembers(group);
 		/*
@@ -47,8 +48,8 @@ public class Main {
 				*/
 		//for each profile, get all games
 		
-		//map of game id to game details
-		HashMap<Integer, SteamGame> gameIdDetailsMap = new HashMap<Integer, SteamGame>();
+		//map of game id to steamgame object
+		HashMap<Integer, SteamGame> gameIdObjectMap = new HashMap<Integer, SteamGame>();
 		//map of game id to players
 		HashMap<Integer, ArrayList<SteamProfile>> gameIdPlayersMap = new HashMap<Integer, ArrayList<SteamProfile>>();
 
@@ -75,32 +76,41 @@ public class Main {
 				for (SteamGame game : games)
 				{
 					//skip non multiplayer games
-					if (! svc.isMultiplayer(game))
+					if ( !svc.isMultiplayer(game))
 					{
 						//System.err.println(String.format("%s is not multi-player. Discarding...", game.getName()));
 						continue;
 					}
 
-					
-					
-					
-					
-					if (!gameIdDetailsMap.containsKey(game.getId()))
+					if (svc.isFree(game))
 					{
-						//add game to details map
-						gameIdDetailsMap.put(game.getId(), game);
-						// add new list containing player, add player map 
-						ArrayList<SteamProfile> list = new ArrayList<SteamProfile>();
-						list.add(profile);
-						gameIdPlayersMap.put(game.getId(), list);
-					}					
+						if (!gameIdObjectMap.containsKey(game.getId()))
+						{
+							//add game to details map
+							gameIdObjectMap.put(game.getId(), game);
+						}
+						//else nothing - we don't need to record player details
+					}
 					else
 					{
-						// game details should be in map
-						//gameIdDetailsMap.get(game.getId());
-						ArrayList<SteamProfile> list = gameIdPlayersMap.get(game.getId());
-						//add to list
-						list.add(profile);
+						// standard game - if we know about it...
+						if (!gameIdObjectMap.containsKey(game.getId()))
+						{
+							//add game to details map
+							gameIdObjectMap.put(game.getId(), game);
+							// add new list containing player, add player map 
+							ArrayList<SteamProfile> list = new ArrayList<SteamProfile>();
+							list.add(profile);
+							gameIdPlayersMap.put(game.getId(), list);
+						}					
+						else
+						{
+							// game details should be in map
+							//gameIdDetailsMap.get(game.getId());
+							ArrayList<SteamProfile> list = gameIdPlayersMap.get(game.getId());
+							//add to list
+							list.add(profile);
+						}
 					}
 				}				
 			}
@@ -115,7 +125,7 @@ public class Main {
 		for (Integer gameId : gameIdPlayersMap.keySet())
 		{
 			ArrayList<SteamProfile> profiles = gameIdPlayersMap.get(gameId);
-			SteamGame gameDetail = gameIdDetailsMap.get(gameId);
+			SteamGame gameDetail = gameIdObjectMap.get(gameId);
 			
 			if (!playerCountGamesMap.containsKey(profiles.size()))
 			{
@@ -194,12 +204,34 @@ public class Main {
 			}							
 		}
 		//html footer
-		DateFormat formatter = DateFormat.getDateInstance(DateFormat.LONG);
-		String dateinfo = formatter.format(new Date());
 		out.println("</table><br/>");
+
+		out.println("<div class=\"free\">");
+		out.println("<b>Free games:</b><br/>");
+		String gameList = "";
+		
+		SteamGame[] freeGames = svc.getFreeGames();
+		System.err.println(String.format("Free - %s games, ", freeGames.length));
+		for (SteamGame game : freeGames)
+		{
+			System.err.println(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
+			gameList += String.format("<a href=\"%s\">%s</a>, ", game.getStoreUrl(), game.getName());
+		}
+		//remove last comma
+		if (gameList.lastIndexOf(", ") >= 0)
+		{
+			gameList = gameList.substring(0, gameList.lastIndexOf(", "));
+		}
+		//add line break
+		gameList += "<br/>";
+		out.println(gameList);
+		out.println("</div><br/>");
+		
+		
+		out.println("<div class=\"other\">");
 		//games owned by one person
 		out.println("<b>Games owned by one person:</b><br/>");
-		String gameList = "";
+		gameList = "";
 		
 		SortedMap<String, SteamGame> map = playerCountGamesMap.get(1);		
 		
@@ -209,9 +241,22 @@ public class Main {
 			System.err.println(String.format("Game '%s' (id:%s)", game.getName(), game.getId()));
 			gameList += String.format("<a href=\"%s\">%s</a>, ", game.getStoreUrl(), game.getName());
 		}
-		gameList = gameList.substring(0, gameList.lastIndexOf(", ")) + "<br/>";
+		//remove last comma
+		if (gameList.lastIndexOf(", ") >= 0)
+		{
+			gameList = gameList.substring(0, gameList.lastIndexOf(", "));
+		}
+		//add line break
+		gameList += "<br/>";
 		out.println(gameList);
-		out.println(String.format("<br/>Last generated: %s</body></html>", dateinfo));
+		out.println("</div>");
+		out.println("<div class=\"date\">");
+		//date info
+		DateFormat formatter = DateFormat.getDateInstance(DateFormat.LONG);
+		String dateinfo = formatter.format(new Date());
+		out.println(String.format("<br/>Last generated: %s", dateinfo));
+		out.println("</div>");
+		out.println("</body></html>");
 		
 		out.close();
 
