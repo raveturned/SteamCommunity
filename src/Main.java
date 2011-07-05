@@ -233,7 +233,13 @@ public class Main {
 		out.println("<b>Games owned by one person:</b><br/>");
 		gameList = "";
 		
-		SortedMap<String, SteamGame> map = playerCountGamesMap.get(1);		
+		SortedMap<String, SteamGame> map = playerCountGamesMap.get(1);
+		
+		// in case of no games (shouldn't happen)
+		if (map == null)
+		{
+			map = new TreeMap<String, SteamGame>();
+		}
 		
 		System.err.println(String.format("Players: 1 - %s games, ", map.size()));
 		for (SteamGame game : map.values())
