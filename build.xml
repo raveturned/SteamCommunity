@@ -18,7 +18,7 @@
 	  </path>	
 	
 	<path id="classpath.test">
-    	<pathelement path="/Library/Java/Extensions/JUnit/junit4.8.2/junit-4.8.2.jar"/>
+    	<pathelement path="lib/junit-4.8.2.jar"/>
 	    <pathelement location="${tst-dir}" />
 	    <path refid="classpath.base" />		
 	</path>
