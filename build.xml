@@ -88,4 +88,13 @@
 		  </batchtest>
     	</junit>
     </target>
+	
+	<!-- target jar -->
+	<target name="makejar" depends="default">
+		<jar destfile="app.jar" basedir="bin" excludes="**/*Tests.class">
+			<manifest>
+				<attribute name="Main-Class" value="Main"/>
+			</manifest>
+		</jar>
+	</target>
 </project>
