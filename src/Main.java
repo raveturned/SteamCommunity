@@ -157,8 +157,12 @@ public class Main {
 			out.println("--------------------------------------------------");
 			out.println();
 		}
+		//doctype
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 		//html start, open headers
-		out.println("<html><head>");
+		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>");
+		//title
+		out.println(String.format("<title>Common games for %s</title>", group));
 		//link to CSS
 		out.println("<link href=\"flopsoc.css\" rel=\"stylesheet\" type=\"text/css\" />");
 		//close headers, open body
@@ -285,15 +289,15 @@ public class Main {
 	}
 
 	private static String formatGameData(SteamGame game) {
-		String format = "<a href=\"%s\"><img src=\"%s\"/><br/>%s</a>";
-		String output = String.format(format, game.getStoreUrl(), game.getLogoUrl(), game.getName());
+		String format = "<a href=\"%s\"><img src=\"%s\" alt=\"%s\" /><br/>%s</a>";
+		String output = String.format(format, game.getStoreUrl(), game.getLogoUrl(), game.getName(), game.getName());
 		return output;
 	}
 
 	
 	private static String formatProfileData(SteamProfile profile) {
-		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\"/> %s</a> </div> ";
-		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName());
+		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\" alt=\"%s\" /> %s</a> </div> ";
+		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName(), profile.getName());
 		return output;
 	}
 }
