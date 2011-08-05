@@ -1,0 +1,87 @@
+a {
+	text-decoration: none;
+	color: 1f1f1f;
+	font-weight:bold;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+table
+{
+	border-collapse:collapse;
+}
+
+table, th, td
+{
+	border: 1px solid black;
+	padding: 2px;
+}
+
+.player {
+    padding: 2px;
+    width: 145px;
+    float: left;
+    
+}
+
+.playerList { 
+    float: left;
+    padding: 2px;
+    width: 300px;
+}
+
+.playerCount {
+    width: 100px;
+    float: left;
+    padding: 2px;
+}
+
+.game { 
+    width: 200px;
+    float: left;
+    padding: 2px;
+}
+
+.header {
+    font-weight: bold;
+}
+
+.row {
+    width: 640px;
+    border: 1px solid black;
+}
+
+div.row hr {
+    display: block;
+    clear: left;
+    visibility: hidden;
+}
+
+.tab {
+    border: 1px solid black;
+    clear: none;
+    width: 640px;
+}
+
+.free {
+    clear: both;
+}
+
+.other {
+    clear: both;
+}
+
+.date {
+    clear: both;
+}
+
+.main {
+    width: 640px;
+}

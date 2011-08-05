@@ -35,6 +35,7 @@ public class SteamDataService {
 		addFreeGame(99900,	"Spiral Knights");
 		addFreeGame(440,	"Team Fortress 2");
 		addFreeGame(11020,	"TrackMania Nations Forever");
+		addFreeGame(107900, "War Inc. Battlezone");
 	}
 	
 	private SteamGame mockGame(int id, String name)

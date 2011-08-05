@@ -157,16 +157,30 @@ public class Main {
 			out.println("--------------------------------------------------");
 			out.println();
 		}
-		//html headers
+		//html start, open headers
 		out.println("<html><head>");
+		//link to CSS
 		out.println("<link href=\"flopsoc.css\" rel=\"stylesheet\" type=\"text/css\" />");
-		out.println("</head><body><table border=1px>");
-		
-		out.println("<tr><th width=200px>Game</th><th>Player Count</th><th>Players</th></tr>");
+		//close headers, open body
+		out.println("</head><body><div class=\"main\">");
+		//open table
+		out.println("<div class=\"tab\">");
+		//headers
+		out.println("<div class=\"row\"> " +
+						"<div class=\"header game\">Game</div> " +
+						"<div class=\"header playerCount\">Player Count</div> " +
+						"<div class=\"header playerList\">Players</div> " +
+					"<hr /></div> ");
 		
 		//System.err.println("Enumerating games:");
 		//gamedatastring, playercount, playerdatastring
-		String output = "<tr><td width=200px>%s</td><td>%s</td><td>%s</td></tr>";
+		
+		//define format for row
+		String output = "<div class=\"row\"> "+
+							"<div class=\"game\">%s</div> " +
+							"<div class=\"playerCount\">%s</div> " +
+							"<div class=\"playerList\">%s</div> " +
+						"<hr /></div> ";
 		// output sorted values - games, size, profiles (from earlier hashset)
 		for (Integer playerCount : playerCountGamesMap.descendingKeySet())
 		{
@@ -185,26 +199,28 @@ public class Main {
 				
 				//System.err.println(" is multi-player! Sending output.");
 				
+				//get game data output
 				String gamedata = formatGameData(game);
 				
 				ArrayList<SteamProfile> players = gameIdPlayersMap.get(game.getId());
 				String playerString = "";
 				
+				//make player data output
 				for ( int i = 0; i < players.size(); i++)
 				{
 					SteamProfile player = players.get(i);
 					playerString += formatProfileData(player);
-					if (i < players.size() -1)
-					{
-						playerString += "<br/>";
-					}
+					//if (i < players.size() -1)
+					//{
+					//	playerString += "<br/>";
+					//}
 				}
 								
 				out.println(String.format(output, gamedata, playerCount, playerString ));
 			}							
 		}
-		//html footer
-		out.println("</table><br/>");
+		//table footer
+		out.println("</div><br/>");
 
 		out.println("<div class=\"free\">");
 		out.println("<b>Free games:</b><br/>");
@@ -262,7 +278,7 @@ public class Main {
 		String dateinfo = formatter.format(new Date());
 		out.println(String.format("<br/>Last generated: %s", dateinfo));
 		out.println("</div>");
-		out.println("</body></html>");
+		out.println("</div></body></html>");
 		
 		out.close();
 
@@ -276,7 +292,7 @@ public class Main {
 
 	
 	private static String formatProfileData(SteamProfile profile) {
-		String format = "<a href=\"%s\"><img src=\"%s\"/> %s </a>";
+		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\"/> %s</a> </div> ";
 		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName());
 		return output;
 	}
