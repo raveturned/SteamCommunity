@@ -14,6 +14,7 @@ public class SteamDataService {
 	
 	HashMap<Integer, String[]> gameDetails = new HashMap<Integer, String[]>();
 	HashMap<Integer, SteamGame> freeGames = new HashMap<Integer, SteamGame>();
+	//HashMap<Integer, >
 	
 	public SteamDataService()
 	{
@@ -41,7 +42,7 @@ public class SteamDataService {
 	private SteamGame mockGame(int id, String name)
 	{
 		String storeUrl = String.format("http://store.steampowered.com/app/%s", id);
-		return new SteamGame(id, name, null, storeUrl);
+		return new SteamGame(id, name, null, storeUrl, 0.0f);
 	}
 	private void addFreeGame(int id, String name)
 	{
@@ -59,8 +60,9 @@ public class SteamDataService {
 	}
 
 	public SteamGame[] getSteamGamesById(long id) {
+		SteamGame[] games = xmlRepo.getSteamGamesById(id);		
 		// TODO Auto-generated method stub
-		return xmlRepo.getSteamGamesById(id);
+		return games;
 	}
 
 	public boolean gameHasDetail(int id, String detail) {

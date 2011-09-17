@@ -75,6 +75,8 @@ public class Main {
 				
 				for (SteamGame game : games)
 				{
+					profile.setHoursOnRecord(game.getId(), game.getHoursOnRecord());
+					
 					//skip non multiplayer games
 					if ( !svc.isMultiplayer(game))
 					{
@@ -84,6 +86,7 @@ public class Main {
 
 					if (svc.isFree(game))
 					{
+						//if we haven't seen it before
 						if (!gameIdObjectMap.containsKey(game.getId()))
 						{
 							//add game to details map
@@ -93,7 +96,7 @@ public class Main {
 					}
 					else
 					{
-						// standard game - if we know about it...
+						// standard game - if we haven't seen it before...
 						if (!gameIdObjectMap.containsKey(game.getId()))
 						{
 							//add game to details map
@@ -213,7 +216,7 @@ public class Main {
 				for ( int i = 0; i < players.size(); i++)
 				{
 					SteamProfile player = players.get(i);
-					playerString += formatProfileData(player);
+					playerString += formatProfileData(player, game.getId());
 					//if (i < players.size() -1)
 					//{
 					//	playerString += "<br/>";
@@ -295,9 +298,13 @@ public class Main {
 	}
 
 	
-	private static String formatProfileData(SteamProfile profile) {
-		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\" alt=\"%s\" /> %s</a> </div> ";
-		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName(), profile.getName());
+	private static String formatProfileData(SteamProfile profile, int appId) {
+		String hoursplayed = "";
+		
+		hoursplayed = String.format("<br /> (Played %s hours) ", profile.getHoursOnRecord(appId));
+		
+		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\" alt=\"%s\" />%s</a></div> ";
+		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName(), profile.getName(), hoursplayed);
 		return output;
 	}
 }

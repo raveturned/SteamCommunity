@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 
 public class SteamProfile {
 
@@ -8,6 +10,8 @@ public class SteamProfile {
 	String _smallAvatarUrlString;
 	String _mediumAvatarUrlString;
 	String _largeAvatarUrlString;
+	
+	HashMap<Integer, Float> _appHoursOnRecord = new HashMap<Integer, Float>();
 	
 	public SteamProfile(long id, String name,
 			String smallAvatarUrl, String mediumAvatarUrl, String largeAvatarUrl) {
@@ -45,5 +49,18 @@ public class SteamProfile {
 	{
 		return String.format("http://steamcommunity.com/profiles/%s/", _id);
 	}
-			
+	
+	public void setHoursOnRecord(int appId, float hours)
+	{
+		_appHoursOnRecord.put(appId, hours);
+	}
+	
+	public float getHoursOnRecord(int appId)
+	{
+		if (_appHoursOnRecord.containsKey(appId))
+		{
+			return _appHoursOnRecord.get(appId);
+		}
+		else return 0f;
+	}
 }

@@ -3,6 +3,7 @@ package repository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.text.html.HTMLEditorKit;
@@ -20,13 +21,29 @@ public class SteamStoreHtmlRepository {
 
 		//get stream to html
 	    try {
-	        URL u = new URL(String.format(appUrl, id) );
-	        InputStream in = u.openStream();
-	        InputStreamReader r = new InputStreamReader(in);
+	        InputStreamReader r = getStreamReaderForUrl(id);
 	        parser.parse(r, callback, true);
-	      } catch (IOException e) {
-	        System.err.println(e);
-	      }		//send through parser
-	      return callback.getResults();
+	    }
+	    catch (IOException e) {
+	    	System.err.print(" (*FAIL - 2nd attempt...*) ");
+	    	//try again...
+	  	    try {
+		        InputStreamReader r = getStreamReaderForUrl(id);
+		        parser.parse(r, callback, true);
+		    }
+	  	    catch (IOException e2) {
+	  	    	//report error
+		        System.err.println(e2);
+		    }
+	    }		//send through parser
+	    return callback.getResults();
+	}
+
+	private InputStreamReader getStreamReaderForUrl(int id)
+			throws MalformedURLException, IOException {
+		URL u = new URL(String.format(appUrl, id) );
+		InputStream in = u.openStream();
+		InputStreamReader r = new InputStreamReader(in);
+		return r;
 	}	
 }

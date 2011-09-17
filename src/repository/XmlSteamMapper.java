@@ -97,7 +97,14 @@ public class XmlSteamMapper {
 				String logoUrl = getTextValue(ele, "logo");
 				String storeUrl = getTextValue(ele, "storeLink");
 				
-				game = new SteamGame(id, name, logoUrl, storeUrl);
+				String hoursOnRecordStr = getTextValue(ele, "hoursOnRecord");
+				float hoursOnRecord = 0.0f;
+				if (!(hoursOnRecordStr == null || hoursOnRecordStr.isEmpty()))
+				{
+					hoursOnRecord = Float.parseFloat(hoursOnRecordStr);
+				}
+				
+				game = new SteamGame(id, name, logoUrl, storeUrl, hoursOnRecord);
 			}
 			catch (NumberFormatException nfe)
 			{

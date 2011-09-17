@@ -28,11 +28,7 @@ public class SteamXmlRepository {
 		//get the factory
 		try {
 	
-			//Using factory get an instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-	
-			//parse using builder to get DOM representation of the XML file
-			result = db.parse(uri);
+			result = getXmlDocInner(uri, dbf);
 	
 		}catch(ParserConfigurationException pce) {
 			//pce.printStackTrace();
@@ -43,10 +39,26 @@ public class SteamXmlRepository {
 			//TODO: log exception
 			System.err.println(String.format(generalErr, se.getClass(), se.getLocalizedMessage()));
 		}catch(IOException ioe) {
-			//ioe.printStackTrace();
-			//TODO: log exception
-			System.err.println(String.format(generalErr, ioe.getClass(), ioe.getLocalizedMessage()));
+			//try again...
+			try {
+				result = getXmlDocInner(uri, dbf);
+			}
+			catch(Exception ioe2)
+			{
+				System.err.println(String.format(generalErr, ioe2.getClass(), ioe2.getLocalizedMessage()));
+			}
 		}
+		return result;
+	}
+
+	private Document getXmlDocInner(String uri, DocumentBuilderFactory dbf)
+			throws ParserConfigurationException, SAXException, IOException {
+		Document result;
+		//Using factory get an instance of document builder
+		DocumentBuilder db = dbf.newDocumentBuilder();
+
+		//parse using builder to get DOM representation of the XML file
+		result = db.parse(uri);
 		return result;
 	}
 	
