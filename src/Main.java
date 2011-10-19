@@ -57,6 +57,8 @@ public class Main {
 				{
 					SteamGame game = gameData.get_app();
 					
+					// TODO: should filtering be in service layer? probably
+					
 					//skip non multiplayer games
 					if ( !svc.isMultiplayer(game))
 					{

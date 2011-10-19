@@ -1,28 +1,28 @@
 Steam Community Helper
 ======================
 
-Get group details from community page xml
-	name
-	id
+Reimplement lost functionality
+	- sort games list by the games users have played recently, or at all, rather than own
+	- remove free games list - above functionality makes it redundant
 
 Get user's groups (from user's xml)
 
-Get groups of users
+Get lists of users from other sources
 	- user's friends (http://steamcommunity.com/id/raveturned/friends?xml=1)	
 
 Factor html writing code into view package
-Factor processing code into service package
+Factor more logic into service package
+	- sorting
+	- filtering
+	- caching
 Hide everything behind interfaces, for encapsulation/testibility/mocking.
 
 Optimise!
-Include free games list.
-Nicer HTML.
-Include small list of multiplayer games which one member owns.
+Improve CSS.
 
 =====
 
 Issues
 	- failure when getting profiles of RPS members
 	- Some games get listed twice with same ids? e.g. CoD MW2 & CoD MW2 Multi-Player
-	- filter games by details earlier in process to reduce iteration overhead
 	
