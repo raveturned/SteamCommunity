@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import model.SteamGame;
 import model.SteamProfile;
+import model.SteamProfileGameData;
 import repository.SteamStoreHtmlRepository;
 import repository.SteamXmlRepository;
 
@@ -24,7 +25,7 @@ public class SteamDataService {
 		initFreeGames();
 	}
 	
-	//ToDo: find a way to not hard-code this
+	//TODO: find a way to not hard-code this
 	private void initFreeGames()
 	{
 		addFreeGame(630,	"Alien Swarm");
@@ -42,7 +43,7 @@ public class SteamDataService {
 	private SteamGame mockGame(int id, String name)
 	{
 		String storeUrl = String.format("http://store.steampowered.com/app/%s", id);
-		return new SteamGame(id, name, null, storeUrl, 0.0f);
+		return new SteamGame(id, name, null, storeUrl);
 	}
 	private void addFreeGame(int id, String name)
 	{
@@ -50,19 +51,26 @@ public class SteamDataService {
 	}
 
 	public long[] getSteamGroupMembers(String group) {
-		// TODO Auto-generated method stub
 		return xmlRepo.getSteamGroupMembers(group);
 	}
 
 	public SteamProfile getSteamProfile(long id) {
-		// TODO Auto-generated method stub
-		return xmlRepo.getSteamProfile(id);
+		SteamProfile profile = xmlRepo.getSteamProfile(id);
+		SteamProfileGameData[] profileGameData = getSteamProfileGameDataById(id);
+		
+		for(SteamProfileGameData data : profileGameData)
+		{
+			//TODO - needs better encapsulation
+			profile.setProfileGameData(data.get_app().getId(), data);	
+		}
+		
+		
+		return profile;
 	}
 
-	public SteamGame[] getSteamGamesById(long id) {
-		SteamGame[] games = xmlRepo.getSteamGamesById(id);		
-		// TODO Auto-generated method stub
-		return games;
+	private SteamProfileGameData[] getSteamProfileGameDataById(long id) {
+		SteamProfileGameData[] gamedata = xmlRepo.getSteamGamesById(id);		
+		return gamedata;
 	}
 
 	public boolean gameHasDetail(int id, String detail) {

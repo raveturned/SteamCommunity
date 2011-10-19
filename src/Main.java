@@ -13,39 +13,20 @@ import java.util.TreeMap;
 import service.SteamDataService;
 import model.*;
 
-// TODO: should not call repo directly - all through service layer
-// service layer should call repo, cache objects (e.g. game), perform sorting
-// output should be mediated by separate view class
-
 public class Main {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {		
-		
-		// TODO get ids from group xml page
-		//get profiles for all people from member list
-		
+				
+		//TODO allow group to be specified on command line
 		String group = "flopsoc";
-
-		//repository
-		//SteamXmlRepository repo = new SteamXmlRepository();
 		
 		SteamDataService svc = new SteamDataService();
-	
 		
 		long[] memberIds = svc.getSteamGroupMembers(group);
-		/*
-		{
-				// list of as 20/05/2011
-				76561197970485997l,
-				76561198006375606l,
-				76561198030489958l,
-				76561197969494863l,
-				76561197964551997l
-				};
-				*/
+
 		//for each profile, get all games
 		
 		//map of game id to steamgame object
@@ -71,11 +52,10 @@ public class Main {
 			System.err.println(String.format(" %s", profile.getName()));
 			if (profile != null)
 			{
-				SteamGame[] games= svc.getSteamGamesById(id);
 				
-				for (SteamGame game : games)
+				for (SteamProfileGameData gameData : profile.getAllProfileGameData())
 				{
-					profile.setHoursOnRecord(game.getId(), game.getHoursOnRecord());
+					SteamGame game = gameData.get_app();
 					
 					//skip non multiplayer games
 					if ( !svc.isMultiplayer(game))
@@ -119,7 +99,8 @@ public class Main {
 			}
 		}
 		
-		
+		//Sorting for output
+		//TODO: should this be in View classes, or in service layer?
 		//create new sorted hashtable of size of profile and game
 		TreeMap<Integer, SortedMap<String, SteamGame>> playerCountGamesMap = new TreeMap<Integer, SortedMap<String, SteamGame>>();
 
@@ -146,8 +127,12 @@ public class Main {
 			}
 		}				
 
-	    // Create file
-		
+		/*
+		 *TODO:	Below this point is output and formatting
+		 *		This is View! Should be in separate classes!
+		 */
+
+		// Create file
 		PrintStream out = null;
 		try {
 			out = new PrintStream(new FileOutputStream("output.html", false));
@@ -301,7 +286,7 @@ public class Main {
 	private static String formatProfileData(SteamProfile profile, int appId) {
 		String hoursplayed = "";
 		
-		hoursplayed = String.format("<br /> (Played %s hours) ", profile.getHoursOnRecord(appId));
+		hoursplayed = String.format("<br /> (Played %s hours) ", profile.getProfileGameData(appId).get_hoursOnRecord());
 		
 		String format = "<div class=\"player\"> <a href=\"%s\"><img src=\"%s\" alt=\"%s\" />%s</a></div> ";
 		String output = String.format(format, profile.getCommunityProfileUrl(), profile.getSmallAvatarUrl(), profile.getName(), profile.getName(), hoursplayed);

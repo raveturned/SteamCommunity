@@ -97,14 +97,14 @@ public class SteamXmlRepository {
 		return profile;
 	}
 
-	public SteamGame[] resolveSteamGames(String uri)
+	public SteamProfileGameData[] resolveSteamGames(String uri)
 	{
 		return resolveSteamGames(uri, DocumentBuilderFactory.newInstance());
 	}
 	
-	public SteamGame[] resolveSteamGames(String uri, DocumentBuilderFactory dbf)	
+	public SteamProfileGameData[] resolveSteamGames(String uri, DocumentBuilderFactory dbf)	
 	{
-		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
+		ArrayList<SteamProfileGameData> gameList = new ArrayList<SteamProfileGameData>();
 
 		Document result = getXmlDoc(uri, dbf);
 		
@@ -114,19 +114,19 @@ public class SteamXmlRepository {
 			Element root = result.getDocumentElement();
 			//should be 'profile'
 			//System.err.println("Profile root node name: " + root.getNodeName());
-			gameList.addAll(mapper.mapXmlToGamesList(root));
+			gameList.addAll(mapper.mapXmlToProfileGameDataList(root));
 			
 		}
-		return gameList.toArray(new SteamGame[gameList.size()]);
+		return gameList.toArray(new SteamProfileGameData[gameList.size()]);
 	}
 
-	public SteamGame[] getSteamGamesById(long id)
+	public SteamProfileGameData[] getSteamGamesById(long id)
 	{
 		String uri = String.format("http://www.steamcommunity.com/profiles/%s/games?xml=1", id);
 		return resolveSteamGames(uri);
 	}
 
-	public SteamGame[] getSteamGamesByName(String name)
+	public SteamProfileGameData[] getSteamGamesByName(String name)
 	{
 		String uri = String.format("http://www.steamcommunity.com/id/%s/games?xml=1", name);
 		return resolveSteamGames(uri);

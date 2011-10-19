@@ -1,7 +1,7 @@
 package model;
 
+import java.util.Collection;
 import java.util.HashMap;
-
 
 public class SteamProfile {
 
@@ -11,7 +11,8 @@ public class SteamProfile {
 	String _mediumAvatarUrlString;
 	String _largeAvatarUrlString;
 	
-	HashMap<Integer, Float> _appHoursOnRecord = new HashMap<Integer, Float>();
+	HashMap<Integer, SteamProfileGameData> _profileGameData = new HashMap<Integer, SteamProfileGameData>();
+
 	
 	public SteamProfile(long id, String name,
 			String smallAvatarUrl, String mediumAvatarUrl, String largeAvatarUrl) {
@@ -31,17 +32,14 @@ public class SteamProfile {
 	}
 	
 	public String getSmallAvatarUrl() {
-		// TODO Auto-generated method stub
 		return _smallAvatarUrlString;
 	}
 	
 	public String getMediumAvatarUrl() {
-		// TODO Auto-generated method stub
 		return _mediumAvatarUrlString;
 	}	
 	
 	public String getLargeAvatarUrl() {
-		// TODO Auto-generated method stub
 		return _largeAvatarUrlString;
 	}
 	
@@ -50,17 +48,23 @@ public class SteamProfile {
 		return String.format("http://steamcommunity.com/profiles/%s/", _id);
 	}
 	
-	public void setHoursOnRecord(int appId, float hours)
+	public Collection<SteamProfileGameData> getAllProfileGameData()
 	{
-		_appHoursOnRecord.put(appId, hours);
+		return _profileGameData.values(); 
 	}
 	
-	public float getHoursOnRecord(int appId)
+	public void setProfileGameData(int appId, SteamProfileGameData gamedata)
 	{
-		if (_appHoursOnRecord.containsKey(appId))
-		{
-			return _appHoursOnRecord.get(appId);
-		}
-		else return 0f;
+		_profileGameData.put(appId, gamedata); 
 	}
+	
+	public SteamProfileGameData getProfileGameData(int appId)
+	{
+		if (_profileGameData.containsKey(appId))
+		{
+			return _profileGameData.get(appId);
+		}
+		else return null;
+	}
+	
 }

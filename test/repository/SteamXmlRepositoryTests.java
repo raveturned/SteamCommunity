@@ -112,7 +112,7 @@ public class SteamXmlRepositoryTests {
 		
 		SteamXmlRepository repo = new SteamXmlRepository();
 		SteamProfile profile = repo.resolveSteamProfile(profileuri, factory);
-		SteamGame[] gameslist = repo.resolveSteamGames(gamesuri, factory);
+		SteamProfileGameData[] gameslist = repo.resolveSteamGames(gamesuri, factory);
 		
 		assertNull("Profile should be null", profile);
 		assertEquals("Games list should be empty", 0, gameslist.length);
@@ -147,7 +147,7 @@ public class SteamXmlRepositoryTests {
 	public void getGamesById()
 	{
 		SteamXmlRepository repo = new SteamXmlRepository();
-		SteamGame[] games = repo.getSteamGamesById(76561198030489958l);
+		SteamProfileGameData[] games = repo.getSteamGamesById(76561198030489958l);
 		
 		assertNotNull("Games list should not be null", games);
 		assertTrue("Should be more than 5 games", games.length > 5);
@@ -158,7 +158,7 @@ public class SteamXmlRepositoryTests {
 	public void getGamesByName()
 	{
 		SteamXmlRepository repo = new SteamXmlRepository();
-		SteamGame[] games = repo.getSteamGamesByName("freakyflyingmonkey");
+		SteamProfileGameData[] games = repo.getSteamGamesByName("freakyflyingmonkey");
 		
 		assertNotNull("Games list should not be null", games);
 		assertTrue("Should be more than 5 games", games.length > 5);

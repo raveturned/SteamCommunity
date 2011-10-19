@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import model.SteamGame;
 import model.SteamGroup;
 import model.SteamProfile;
+import model.SteamProfileGameData;
 
 public class XmlSteamMapper {
 
@@ -52,9 +53,9 @@ public class XmlSteamMapper {
 
 	}
 	
-	public ArrayList<SteamGame> mapXmlToGamesList(Element ele)
+	public ArrayList<SteamProfileGameData> mapXmlToProfileGameDataList(Element ele)
 	{
-		ArrayList<SteamGame> gameList = new ArrayList<SteamGame>();
+		ArrayList<SteamProfileGameData> gameDataList = new ArrayList<SteamProfileGameData>();
 		
 		if ("gamesList".equalsIgnoreCase(ele.getNodeName()))
 		{
@@ -68,43 +69,54 @@ public class XmlSteamMapper {
 									
 				Element el = (Element)node;
 
-				SteamGame game = mapXmlToGame(el);
+				SteamProfileGameData gamedata = mapXmlToGameData(el);
 				
-				if (game != null)
+				if (gamedata != null)
 				{
-					gameList.add(game);
+					gameDataList.add(gamedata);
 				}
 				
 				i++;
 				node = nl.item(i);
 			}
 		}
-		return gameList;
+		return gameDataList;
 
 	}
 	
-	public SteamGame mapXmlToGame(Element ele)
+	public SteamProfileGameData mapXmlToGameData(Element ele)
 	{
-		SteamGame game = null;
+		
+		SteamProfileGameData profileGameData = null;
 		String gameErr = "Error resolving steam game: %s - %s";
 
 		if ("game".equalsIgnoreCase(ele.getNodeName()))
 		{
 
 			try {
+				//generic game data
 				int id = Integer.parseInt(getTextValue(ele, "appID"));
+				//TODO: no need to parse this data if appId has been seen before
 				String name = getTextValue(ele, "name");
 				String logoUrl = getTextValue(ele, "logo");
 				String storeUrl = getTextValue(ele, "storeLink");
 				
+				// profile-specific data
 				String hoursOnRecordStr = getTextValue(ele, "hoursOnRecord");
+				String hoursInLast2WeeksStr = getTextValue(ele, "hoursLast2Weeks");
 				float hoursOnRecord = 0.0f;
+				float hoursInLast2Weeks = 0.0f;
 				if (!(hoursOnRecordStr == null || hoursOnRecordStr.isEmpty()))
 				{
 					hoursOnRecord = Float.parseFloat(hoursOnRecordStr);
 				}
+				if (!(hoursInLast2WeeksStr == null || hoursInLast2WeeksStr.isEmpty()))
+				{
+					hoursInLast2Weeks = Float.parseFloat(hoursInLast2WeeksStr);
+				}
 				
-				game = new SteamGame(id, name, logoUrl, storeUrl, hoursOnRecord);
+				SteamGame game = new SteamGame(id, name, logoUrl, storeUrl);
+				profileGameData = new SteamProfileGameData(game, hoursOnRecord, hoursInLast2Weeks);
 			}
 			catch (NumberFormatException nfe)
 			{
@@ -112,7 +124,7 @@ public class XmlSteamMapper {
 			}
 		}
 		
-	return game;
+	return profileGameData;
 	}
 
 	public ArrayList<SteamGroup> mapXmlToGroupList(Element ele)

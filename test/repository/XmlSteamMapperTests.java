@@ -133,10 +133,10 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamGame game = mapper.mapXmlToGame(ele);
+		SteamProfileGameData gamedata = mapper.mapXmlToGameData(ele);
 		
-		assertEquals("Correct id", -1, game.getId());
-		assertEquals("Correct name", "test", game.getName());
+		assertEquals("Correct id", -1, gamedata.get_app().getId());
+		assertEquals("Correct name", "test", gamedata.get_app().getName());
 	}	
 	
 	@Test
@@ -162,9 +162,9 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		SteamGame game = mapper.mapXmlToGame(ele);
+		SteamProfileGameData gamedata = mapper.mapXmlToGameData(ele);
 		
-		assertNull("Game should be null", game);
+		assertNull("Game data should be null", gamedata);
 	}	
 	
 
@@ -191,15 +191,15 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		ArrayList<SteamGame> gameslist = mapper.mapXmlToGamesList(ele);
+		ArrayList<SteamProfileGameData> gameDataList = mapper.mapXmlToProfileGameDataList(ele);
 		
-		assertNotNull("Games list should not be null", gameslist);
-		assertEquals("List should have one element", 1, gameslist.size());
+		assertNotNull("Game data list should not be null", gameDataList);
+		assertEquals("List should have one element", 1, gameDataList.size());
 		
-		SteamGame game = gameslist.get(0);
+		SteamProfileGameData gamedata = gameDataList.get(0);
 		
-		assertEquals("Correct id", -1, game.getId());
-		assertEquals("Correct name", "test", game.getName());
+		assertEquals("Correct id", -1, gamedata.get_app().getId());
+		assertEquals("Correct name", "test", gamedata.get_app().getName());
 
 
 	}	
@@ -227,10 +227,10 @@ public class XmlSteamMapperTests extends TestCase {
 		assertNotNull("Result should not be null", result);
 		Element ele = result.getDocumentElement();
 		assertNotNull("Document element should not be null", ele);
-		ArrayList<SteamGame> gameslist = mapper.mapXmlToGamesList(ele);
+		ArrayList<SteamProfileGameData> gameDataList = mapper.mapXmlToProfileGameDataList(ele);
 		
-		assertNotNull("Games list should not be null", gameslist);
-		assertEquals("List should be empty", 0, gameslist.size());
+		assertNotNull("Games data list should not be null", gameDataList);
+		assertEquals("List should be empty", 0, gameDataList.size());
 	}	
 	
 
